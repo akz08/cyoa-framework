@@ -35,3 +35,6 @@ build/
 
 # Vagrant
 /.vagrant/
+
+#Floobits
+.floo*
