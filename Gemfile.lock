@@ -9,3 +9,4 @@ PLATFORMS
 
 DEPENDENCIES
   colorize
+  sinatra
