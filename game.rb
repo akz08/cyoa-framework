@@ -1,7 +1,13 @@
 require 'colorize'
 
 class Message
-	attr_reader :text, :parent, :children, :user_responses
+	attr_reader :text, :parent
+
+	class ExistingParentException < Exception
+	end
+
+	class NoChildrenException < Exception
+	end
 
 	def to_s
 		"-->".red + "\n" +
@@ -13,54 +19,82 @@ class Message
 	def initialize(args)
 		@text = args[:text]
 		@parent = args[:parent] || nil
-		@children = args[:children] || {}
-		@user_responses = {}
+		@children = []
 	end
 
+	Child = Struct.new(:message, :choice)
+
+	# two cases of setting a parent
+	# 1. setting a parent of a new message
+	# 2. changing the parent of a message (need to remove as child)
 	def set_parent(parent)
-		@parent = parent
-	end
-
-	def add_child(child, user_response=nil)
-		child.set_parent(self)
-		if child.is_a? Message 
-			generated_key = @children.count.to_s.to_sym
-			@children[generated_key] = child
-			@user_responses[generated_key] = user_response
+		if @parent != nil
+			raise ExistingParentException
+		else
+			@parent = parent
 		end
 	end
 
-	def options?
-		children.keys
+	def set_parent!(parent)
+
+		if @parent != nil 
+			@parent.remove_child(self)
+		end
+
+		@parent = parent
 	end
 
-	def choose(key)
-		children[key]
+	def add_child(child_message, user_choice=nil)
+		child_message.set_parent(self)
+
+		@children << Child.new(child_message, user_choice)
+	end
+
+	# note: this may mess up the indexing of child messages and choices!
+	def remove_child(child_message)
+		@children.each do |child|
+			if child.message == child_message
+				@children.delete(child)
+			end
+		end
+	end
+
+	def children
+		@children.collect { |child| child.message }
+	end
+
+	def choices
+		# return an array of choices
+		@children.collect { |child| child.choice }
+	end
+
+	def has_choices?
+		# returns boolean on presence of choices
+		choices.each { |choice| return true if choice != nil }
+		return false
+	end
+
+	def choose_response(index)
+		if children.empty?
+			raise NoChildrenException
+		elsif index.nil?
+			children.first
+		else
+			children[index]
+		end
+	end
+
+	def next
+		choose_response(nil)
 	end
 end
 
-puts "Creating new messages...".green.underline
-msg1_1 = Message.new(:text => 'What is your name?')
-msg1_2 = Message.new(:text => 'Are you guy or girl?')
-msg2_1 = Message.new(:text => 'So you are a girl')
-msg2_2 = Message.new(:text => 'So you are a guy')
+class User
+	attr_accessor :name
 
-puts "Adding children...".green.underline
-msg1_2.add_child(msg2_1, "I'm a girl")
-msg1_2.add_child(msg2_2, "I'm a guy")
-puts msg1_2.children
-puts msg1_2.options?
+	def initialize(args)
+		@name = args[:name] || "Bob"
+	end
 
-puts "Checking parents...".green.underline
-puts msg2_1.parent
-puts msg2_2.parent
+end
 
-puts "Traversing down a parent".green.underline
-first_message = msg1_2
-# game_response = msg1_2.choose(0.to_s.to_sym)
-
-puts first_message.text
-puts "Please choose:".blue
-msg1_2.children.keys.each { |key| puts key.to_s.red + ": #{msg1_2.user_responses[key]}"}
-answer = gets.chomp
-puts msg1_2.choose(answer.to_sym).text
