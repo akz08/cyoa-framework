@@ -18,7 +18,7 @@ class Message
 
 	def initialize(args)
 		@text = args[:text]
-		@parent = args[:parent] || nil
+		@parent = nil
 		@children = []
 	end
 
@@ -44,6 +44,8 @@ class Message
 		@parent = parent
 	end
 
+	protected :set_parent, :set_parent!
+
 	def add_child(child_message, user_choice=nil)
 		child_message.set_parent(self)
 
@@ -63,29 +65,29 @@ class Message
 		@children.collect { |child| child.message }
 	end
 
-	def choices
-		# return an array of choices
-		@children.collect { |child| child.choice }
-	end
-
 	def has_choices?
 		# returns boolean on presence of choices
 		choices.each { |choice| return true if choice != nil }
 		return false
 	end
 
+	def choices
+		# return an array of choices
+		@children.collect { |child| child.choice }
+	end
+
 	def choose_response(index)
-		if children.empty?
+		if index > children.length
+			raise IndexError
+		elsif children.empty?
 			raise NoChildrenException
-		elsif index.nil?
-			children.first
 		else
 			children[index]
 		end
 	end
 
 	def next
-		choose_response(nil)
+		choose_response(0)
 	end
 end
 
