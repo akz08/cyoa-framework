@@ -1,7 +1,6 @@
-require 'colorize'
-
 class Message
 	attr_reader :parent
+	attr_accessor :text
 
 	class ExistingParentException < Exception
 	end
@@ -105,6 +104,47 @@ class Message
 	# def next
 	# 	choose_response(0)
 	# end
+end
+
+class Game
+
+	def initialize(args)
+		@name = args[:name]
+		@description = args[:description] || ''
+		@current_msg = nil
+	end
+
+	def start
+		# Create messages
+		msg0 = Message.new(:text => "Hmm...")
+		msg1 = Message.new(:text => "Hi there!")
+		msg2 = Message.new(:text => "What's your name?")
+
+		msg3 = Message.new(:text => "That's a great name!")
+		msg4 = Message.new(:text => "That's a horrible name!")
+		msg5 = Message.new(:text => "But it's cool all the same...")
+
+		# Link up messages
+		msg0.add_child(msg1)
+		msg1.add_child(msg2, 'Hi!')
+		msg2.add_child(msg3, "It's Bob")
+		msg2.add_child(msg4, "It's Zbdfiosf")
+
+		@current_msg = msg0
+		loop do
+			puts @current_msg.text
+			break if @current_msg.children.empty?
+			if @current_msg.has_choices?
+				puts @current_msg.choices
+				user_choice = gets.chomp.to_i
+				@current_msg = @current_msg.children[user_choice].message
+			else
+				@current_msg = @current_msg.children[0].message
+			end
+
+		end
+	end
+
 end
 
 class User
