@@ -112,16 +112,18 @@ class Game
 		@name = args[:name]
 		@description = args[:description] || ''
 		@current_msg = nil
+		@user = args[:user] || User.new(:name => 'Sammy')
 	end
 
 	def start
+
 		# Create messages
 		msg0 = Message.new(:text => "Hmm...")
 		msg1 = Message.new(:text => "Hi there!")
 		msg2 = Message.new(:text => "What's your name?")
 
 		msg3 = Message.new(:text => "That's a great name!")
-		msg4 = Message.new(:text => "That's a horrible name!")
+		msg4 = Message.new(:text => "You don't fool me! Your name is actually NAME!")
 		msg5 = Message.new(:text => "But it's cool all the same...")
 
 		# Link up messages
@@ -132,7 +134,9 @@ class Game
 
 		@current_msg = msg0
 		loop do
-			puts @current_msg.text
+			# puts @current_msg.text
+			print_message(@current_msg)
+
 			break if @current_msg.children.empty?
 			if @current_msg.has_choices?
 				puts @current_msg.choices
@@ -143,6 +147,12 @@ class Game
 			end
 
 		end
+	end
+
+	## THIS SHOULD BE SOMEWHERE ELSE!
+	def print_message(message)
+		processed_msg = message.text.gsub(/NAME/, @user.name)
+		puts processed_msg
 	end
 
 end
