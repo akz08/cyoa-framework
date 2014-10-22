@@ -11,3 +11,5 @@ In the app, the user participates in several scenarios by making decisions that 
 
 ###Objectives
 The core concept of the application was the timed interactions between the user and the scenario's actors. The purpose of creating this framework is to build on this, and simplify the creation of such interactions for more general use.
+
+The current roadmap is to provide an API to create a game scenario and play it, using a separate mobile client. The learning objectives are primarily to practice pair programming and eventually TDD. All pair commits are labelled as such.
