@@ -1,7 +1,7 @@
 require 'colorize'
 
 class Message
-	attr_reader :text, :parent
+	attr_reader :parent
 
 	class ExistingParentException < Exception
 	end
@@ -53,16 +53,31 @@ class Message
 	end
 
 	# note: this may mess up the indexing of child messages and choices!
-	def remove_child(child_message)
+	# takes in the choice index to remove the Child
+	def remove_child(child_message, user_choice=nil)
 		@children.each do |child|
-			if child.message == child_message
+			if child.message == child_message && child.choice == user_choice
 				@children.delete(child)
+			end
+		end
+
+		# some error handling here
+	end
+
+	def delete!
+		# perform things to delete it from persistent store
+		# ...
+
+		# after deleting itself, it removes all references to it in the parent
+		@parent.each do |child|
+			if child.message == self
+				@parent.remove_child(self, child.choice)
 			end
 		end
 	end
 
 	def children
-		@children.collect { |child| child.message }
+		@children #.collect { |child| child.message }
 	end
 
 	def has_choices?
@@ -76,19 +91,20 @@ class Message
 		@children.collect { |child| child.choice }
 	end
 
-	def choose_response(index)
-		if index > children.length
-			raise IndexError
-		elsif children.empty?
-			raise NoChildrenException
-		else
-			children[index]
-		end
-	end
+	# METHODS BELOW GO TO A MESSAGE MANAGER
+	# def choose_response(index)
+	# 	if index > children.length
+	# 		raise IndexError
+	# 	elsif @children.empty?
+	# 		raise NoChildrenException
+	# 	else
+	# 		@children[index] # !!!!!!!!!!!!!!!!! expects an index to match
+	# 	end
+	# end
 
-	def next
-		choose_response(0)
-	end
+	# def next
+	# 	choose_response(0)
+	# end
 end
 
 class User
