@@ -5,18 +5,6 @@
 	# scenario information (e.g. profiles, name, description)
  	# maintaining a local store of message history for each scenario
 
-require 'faraday'
-
-base_url = 'http://127.0.0.1'
-port = '9393'
-
-conn = Faraday.new(:url => base_url + ':' + port)
-
-response = conn.get '/'
-p response.body
-
-# client logic
-
 # information stored by client
 # user_token: string
 # user_name: string
@@ -31,27 +19,74 @@ p response.body
 	# choice_text
 # current_message_delay: number
 
-# on choosing scenario
-	# if first time
-		# send get request to '/scenarios/:unique_scenario_id/messages'
-		# if user's first time on scenario
-			# print first message
-			# if children.choice.is_empty?
-				# request next message
+require 'faraday'
+
+base_url = 'http://127.0.0.1'
+port = '9393'
+
+conn = Faraday.new(:url => base_url + ':' + port)
+
+# testing out the base connection
+response = conn.get '/'
+p response.body
+
+## client logic below
+
+# on application start
+
+scenario_ids = conn.get do |req|
+	req.url '/scenarios'
+	req.params['user_token'] = user_token
+end
+# if scenario_ids == local scenario_ids
+	# ...
+# end
+
+# on scenario information selection
+
+scenario_information = conn.get do |req|
+	req.url '/scenarios/' + unique_scenario_id
+	req.params['user_token'] = user_token
+end
+# if scenario_information != local scenario_information
+	# update local scenario_information
+# display scenario information
+
+# on scenario selection
+
+if first_time?(scenario_id)
+	messages = conn.get '/scenarios/' + unique_scenario_id + '/messages'
+	update_message_log(messages)
+	display_messages(messages)
+else
+	display_messages(message_log)
+end
+
+def display_messages(messages)
+	# for each message in message log
+		# if message is due
+			# render message
+			# if not last message in log
+				# render choice made
 			# else
-				# display choices
+				# display_choices(message)
 			# end
-		# else
-			# store message log in local database
-			# print message log
-		# end
-	# else
-		# print message log
-		# if choices exist on last message
-			# print choices
 		# end
 	# end
+end
 
-	# if choice selected
-	# if delay passes
-	# if scenario history deleted
+def display_choices(message)
+end
+
+def choose(choice_id)
+	# render choice
+	# update message log
+	conn.put do |req|
+		req.url '/messages/' + message_id + '/choices/' + choice_id
+		req.params['user_token'] = user_token
+		req.params['scenario_id'] = scenario_id
+	end
+	next_messages = ... # as part of put request will receive the next message(s)
+	display_messages(next_messages)
+end
+
