@@ -6,9 +6,7 @@ get '/' do
   "It runs from Heroku!"
 end
 
-get '/messages/next' do
-	return {:message => "A message!"}.to_json
-end
+### MOBILE CLIENT API
 
 # API sends 'message' as :
 	# message_id
@@ -16,23 +14,31 @@ end
 	# delay (of current message)
 	# children (message_id, choice)
 
-# when a client app opens a "game scenario" for the first time
-get '/scenarios/:unique_scenario_id/messages' do
-	# get from request body 'first_time' (boolean)
+# ALL routes below require a user token parameter (so linked to an account)
 
- 	# if user's first time 
- 		# create a new record (table) for this particular scenario
- 		# insert scenario's first message into the table
- 		# return first message 
- 	# elsif user already played scenario
- 		# return the message log and next message
- 	# end
+get '/scenarios' do
+	# return all_available_scenario_ids
 end
 
-post '/scenarios/:unique_scenario_id/messages/:message_id/choices/:choice_id' do
+get '/scenarios/:unique_scenario_id' do
+	# return scenario specific information
+end
 
-	# update the user's scenario log in table
+# only called by the client when first time opening a scenario
+get '/scenarios/:unique_scenario_id/messages' do
+	# if a user already has a log
+		# return all messages
 
-	# return next message
+	# else 
+		# create a new empty store 
+		# return first message(s)
+end
 
+put '/messages/:message_id/choices/:choice_id' do
+	# REQUIRES
+		# a paramater corresponding to a scenario id
+
+	# update the store
+
+	# returns the next message(s)
 end
