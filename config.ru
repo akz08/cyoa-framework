@@ -1,3 +1,3 @@
 require './api'
 
-run Sinatra::Application
+run CYOA::API
