@@ -1,10 +1,7 @@
 require 'rubygems'
-require 'sinatra' 
+require 'grape' 
 require 'json'
 
-get '/' do
-  "It runs from Heroku!"
-end
 
 ### MOBILE CLIENT API
 
@@ -16,29 +13,54 @@ end
 
 # ALL routes below require a user token parameter (so linked to an account)
 
-get '/scenarios' do
-	# return all_available_scenario_ids
-end
+module CYOA
+	class API < Grape::API
 
-get '/scenarios/:unique_scenario_id' do
-	# return scenario specific information
-end
+		version 'v0.1'
+		format :json
 
-# only called by the client when first time opening a scenario
-get '/scenarios/:unique_scenario_id/messages' do
-	# if a user already has a log
-		# return all messages
+		get do
+			return "it works on heroku!"
+		end
 
-	# else 
-		# create a new empty store 
-		# return first message(s)
-end
+		resource :scenarios do
 
-put '/messages/:message_id/choices/:choice_id' do
-	# REQUIRES
-		# a paramater corresponding to a scenario id
+			desc "Return all available scenario ids"
+			get do
+				# return all_available_scenario_ids
+			end
 
-	# update the store
+			desc "Return scenario specific information"
+			get :unique_scenario_id do
+				# return scenario specific information
+			end
 
-	# returns the next message(s)
+			# only called by the client when first time opening a scenario
+			desc "Return all messages in a user's scenario"
+			get ":unique_scenario_id/messages" do
+				# if a user already has a log
+					# return all messages
+
+				# else 
+					# create a new empty store 
+					# return first message(s)
+			end
+
+		end
+
+		resource :messages do
+
+			desc "Return ..." 
+			get ":message_id/choices/:choice_id" do
+				# REQUIRES
+					# a paramater corresponding to a scenario id
+
+				# update the store
+
+				# returns the next message(s)
+			end
+
+		end
+
+	end
 end
