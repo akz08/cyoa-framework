@@ -30,9 +30,14 @@ module CYOA
 				# return all_available_scenario_ids
 			end
 
-			desc "Return scenario specific information"
+			desc "Return static information"
 			get :unique_scenario_id do
 				# return scenario specific information
+			end
+
+			desc "Return user progress information"
+			get ":unique_scenario_id/progress" do
+
 			end
 
 			# only called by the client when first time opening a scenario
@@ -48,12 +53,21 @@ module CYOA
 
 		end
 
+		resource :acts do
+			# REQUIRES 
+				# a parameter corresponding to scenario id
+
+			desc "Return available act ids"
+			get  do
+			end
+		end
+
 		resource :messages do
 
 			desc "Return ..." 
 			get ":message_id/choices/:choice_id" do
 				# REQUIRES
-					# a paramater corresponding to a scenario id
+					# a parameter corresponding to a act id
 
 				# update the store
 
