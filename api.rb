@@ -20,7 +20,8 @@ module CYOA
 		format :json
 
 		get do
-			return "it works on heroku!"
+			# return "it works on heroku!"
+			ENV["RACK_ENV"]
 		end
 
 		resource :scenarios do
