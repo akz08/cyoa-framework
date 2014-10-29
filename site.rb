@@ -61,7 +61,7 @@ get '/client-side' do
                   $('#results').html(JSON.stringify(json));
                 });
               }
-            }, { scope: 'email,read_stream', state: 'abc123' });
+            }, { scope: 'public_profile', state: 'abc123' });
           });
         });
       </script>
