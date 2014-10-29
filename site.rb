@@ -2,8 +2,6 @@ require 'sinatra'
 require 'omniauth-facebook'
 
 class Site < Sinatra::Base
-	use Rack::Session::Cookie
-	use OmniAuth::Strategies::Facebook
 
 	get '/'  do
 		# ENV["RACK_ENV"]
@@ -35,16 +33,18 @@ get '/client-side' do
             appId  : '#{ENV['APP_ID']}',
             status : true, // check login status
             cookie : true, // enable cookies to allow the server to access the session
-            xfbml  : true  // parse XFBML
+            xfbml  : true , // parse XFBML
+            version: 'v2.1'
           });
         };
 
-        (function(d) {
-          var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-          js = d.createElement('script'); js.id = id; js.async = true;
-          js.src = "//connect.facebook.net/en_US/all.js";
-          d.getElementsByTagName('head')[0].appendChild(js);
-        }(document));
+        (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
 
         $(function() {
           $('a').click(function(e) {
@@ -74,11 +74,14 @@ get '/client-side' do
     </body>
     </html>
   END
+
+  # redirect '/auth/:provider/callback'
 end
 
 get '/auth/:provider/callback' do
   content_type 'application/json'
-  MultiJson.encode(request.env)
+  p env['omniauth.auth']
+  MultiJson.encode(request.env['omniauth.auth'])
 end
 
 get '/auth/failure' do
