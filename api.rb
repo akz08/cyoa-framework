@@ -23,26 +23,26 @@ module CYOA
 			return "it works on heroku!"
 		end
 
-		resource :scenarios do
+		resource :characters do
 
-			desc "Return all available scenario ids"
+			desc "Return all available character ids"
 			get do
-				# return all_available_scenario_ids
+				# return all_available_character_ids
 			end
 
 			desc "Return static information"
-			get :unique_scenario_id do
-				# return scenario specific information
+			get :unique_character_id do
+				# return character specific information
 			end
 
 			desc "Return user progress information"
-			get ":unique_scenario_id/progress" do
+			get ":unique_character_id/progress" do
 
 			end
 
-			# only called by the client when first time opening a scenario
-			desc "Return all messages in a user's scenario"
-			get ":unique_scenario_id/messages" do
+			# only called by the client when first time opening a character
+			desc "Return all messages with a character"
+			get ":unique_character_id/messages" do
 				# if a user already has a log
 					# return all messages
 
@@ -53,11 +53,11 @@ module CYOA
 
 		end
 
-		resource :acts do
+		resource :scenes do
 			# REQUIRES 
-				# a parameter corresponding to scenario id
+				# a parameter corresponding to character id
 
-			desc "Return available act ids"
+			desc "Return available scene ids"
 			get  do
 			end
 		end
@@ -67,7 +67,7 @@ module CYOA
 			desc "Return ..." 
 			get ":message_id/choices/:choice_id" do
 				# REQUIRES
-					# a parameter corresponding to a act id
+					# a parameter corresponding to a scene id and character id
 
 				# update the store
 
