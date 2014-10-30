@@ -11,6 +11,7 @@
 # character_information: object?
 	# character_id: integer
 	# name: string
+	# age: integer
 	# description: string
 	# current_message_delay: number
 # message_log: database records
@@ -85,7 +86,7 @@ def choose(choice_id)
 	# render choice
 	# update message log
 	next_messages = conn.put do |req|
-		req.url '/messages/' + message_id + '/choices/' + choice_id
+		req.url '/messages/' + message_id + '/choices?id=' + choice_id
 		req.params['user_token'] = user_token
 		req.params['character_id'] = character_id
 	end

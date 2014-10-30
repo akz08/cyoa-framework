@@ -72,11 +72,11 @@ module CYOA
 			end
 
 			desc "Updates user log and returns next messages" 
-			put ":message_id/choices/:choice_id" do
+			put ":message_id/choices?id=:choice_id" do
 				# update the store
 
 				# returns the next message(s)
-				
+
 			end
 
 		end
