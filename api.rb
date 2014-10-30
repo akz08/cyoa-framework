@@ -1,7 +1,10 @@
 require 'rubygems'
 require 'grape' 
 require 'json'
+# require 'sinatra/base'
+require 'sinatra/activerecord'
 
+require_relative 'models/init'
 
 ### MOBILE CLIENT API
 

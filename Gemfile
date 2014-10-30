@@ -10,6 +10,7 @@ gem 'sqlite3'
 
 gem 'grape'
 gem 'faraday'
+gem 'faraday_middleware'
 
 gem 'omniauth-facebook'
 

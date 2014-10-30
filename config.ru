@@ -13,7 +13,7 @@ end
 use Rack::Session::Cookie, :secret => 'abc123'
 
 use OmniAuth::Builder do
-  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'], :scope => 'public_profile,user_friends,email'
+  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'], :scope => 'public_profile,email'
 end
 
 run Rack::Cascade.new [CYOA::API, Site]

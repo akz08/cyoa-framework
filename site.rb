@@ -80,7 +80,27 @@ end
 
 get '/auth/:provider/callback' do
   content_type 'application/json'
-  p env['omniauth.auth']
+  u_id = env['omniauth.auth']['uid']
+  u_first_name = env['omniauth.auth']['info']['first_name']
+  u_last_name = env['omniauth.auth']['info']['last_name']
+  u_email = env['omniauth.auth']['info']['email']
+  fb_token = env['omniauth.auth']['credentials']['token']
+  u_gender = env['omniauth.auth']['extra']['raw_info']['gender']
+
+  user = User.new(
+  	:u_id => u_id,
+  	:u_first_name => u_first_name,
+  	:u_last_name => u_last_name,
+  	:u_email => u_email,
+  	:u_gender => u_gender,
+  	:fb_token => fb_token
+  	)
+
+  if user.save
+  	puts 'it saved!'
+  else
+  	puts "it didn't save :("
+  end
   MultiJson.encode(request.env['omniauth.auth'])
 end
 
