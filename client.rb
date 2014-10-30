@@ -2,22 +2,22 @@
 
 # client is responsible for:
 	# user information (token, name)
-	# scenario information (e.g. profiles, name, description)
- 	# maintaining a local store of message history for each scenario
+	# character information (e.g. profiles, name, description)
+ 	# maintaining a local store of message history for each character
 
 # information stored by client
 # user_token: string
 # user_name: string
-# scenario_information: object?
-	# scenario_id: integer
+# character_information: object?
+	# character_id: integer
 	# name: string
 	# description: string
-	# scenario_first_time: boolean
+	# current_message_delay: number
 # message_log: database records
 	# message_id
 	# message_text
+	# choice_id
 	# choice_text
-# current_message_delay: number
 
 require 'faraday'
 
@@ -34,28 +34,29 @@ p response.body
 
 # on application start
 
-scenario_ids = conn.get do |req|
-	req.url '/scenarios'
+character_ids = conn.get do |req|
+	req.url '/characters'
 	req.params['user_token'] = user_token
 end
-# if scenario_ids == local scenario_ids
+# if character_ids == local character_ids
 	# ...
 # end
 
-# on scenario information selection
+# on character information selection (sometimes...)
 
-scenario_information = conn.get do |req|
-	req.url '/scenarios/' + unique_scenario_id
+character_information = conn.get do |req|
+	req.url '/characters/' + unique_character_id
 	req.params['user_token'] = user_token
 end
-# if scenario_information != local scenario_information
-	# update local scenario_information
-# display scenario information
+# if character_information != local character_information
+	# update local character_information
+# display character information
 
-# on scenario selection
+# on character conversation selection
 
-if first_time?(scenario_id)
-	messages = conn.get '/scenarios/' + unique_scenario_id + '/messages'
+if first_time?(character_id) # otherwise, data will be local!
+	messages = conn.get '/messages'
+	# send with character id
 	update_message_log(messages)
 	display_messages(messages)
 else
@@ -78,15 +79,16 @@ end
 def display_choices(message)
 end
 
+# when selecting a choice
+
 def choose(choice_id)
 	# render choice
 	# update message log
-	conn.put do |req|
+	next_messages = conn.put do |req|
 		req.url '/messages/' + message_id + '/choices/' + choice_id
 		req.params['user_token'] = user_token
-		req.params['scenario_id'] = scenario_id
+		req.params['character_id'] = character_id
 	end
-	next_messages = ... # as part of put request will receive the next message(s)
 	display_messages(next_messages)
 end
 

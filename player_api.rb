@@ -40,17 +40,6 @@ module CYOA
 
 			end
 
-			# only called by the client when first time opening a character
-			desc "Return all messages with a character"
-			get ":unique_character_id/messages" do
-				# if a user already has a log
-					# return all messages
-
-				# else 
-					# create a new empty store 
-					# return first message(s)
-			end
-
 		end
 
 		resource :scenes do
@@ -60,18 +49,34 @@ module CYOA
 			desc "Return available scene ids"
 			get  do
 			end
+
+			desc "Return scene information"
+			get :scene_id do
+			end
 		end
 
 		resource :messages do
+			# REQUIRES
+				# a parameter corresponding to a scene id (optional) and character id (required)
 
-			desc "Return ..." 
-			get ":message_id/choices/:choice_id" do
-				# REQUIRES
-					# a parameter corresponding to a scene id and character id
+			desc "Return all messages with a character"
+			get "/" do
+				# if a user already has a log
+					# return all messages
 
+				# else 
+					# create a new empty store 
+					# return first message(s)
+
+				# if scene id specified, only return for that scene
+			end
+
+			desc "Updates user log and returns next messages" 
+			put ":message_id/choices/:choice_id" do
 				# update the store
 
 				# returns the next message(s)
+				
 			end
 
 		end
