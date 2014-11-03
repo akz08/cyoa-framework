@@ -38,3 +38,6 @@ build/
 
 #Floobits
 .floo*
+
+# Environment variables
+/config/environment_variables.yml
