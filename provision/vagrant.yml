@@ -1,0 +1,6 @@
+---
+- name: Configure Vagrant development environment
+  hosts: all
+  gather_facts: no
+  roles:
+    - setup

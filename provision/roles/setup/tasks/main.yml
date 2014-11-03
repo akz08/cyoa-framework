@@ -1,0 +1,28 @@
+---
+- name: Install Git
+  sudo: True
+  apt: name={{ item }} update_cache=yes
+  with_items:
+   - build-essential
+   - git-core
+
+- name: Install Ruby 2.0
+  sudo: True
+  apt: name={{ item }} state=latest
+  with_items:
+   - ruby2.0
+   - ruby2.0-dev
+
+- name: Symlink Ruby 2.0
+  sudo: True
+  file: src=/usr/bin/ruby2.0 dest=/usr/local/bin/ruby state=link
+
+- name: Symlink Ruby Gems 2.0
+  sudo: True
+  file: src=/usr/bin/gem2.0 dest=/usr/local/bin/gem state=link
+
+- name: Install Bundler
+  gem: name=bundler state=latest
+
+- name: Install gems in Gemfile
+  shell: bundle install chdir=/vagrant

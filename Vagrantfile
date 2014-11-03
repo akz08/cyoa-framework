@@ -7,6 +7,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/trusty64"
   
-  config.vm.provision :shell, path: "setup.sh"
+  # Setup port forwarding
+  config.vm.network "forwarded_port", guest: 8080, host: 8000
+
+  # Replace shell script for Ansible
+  config.vm.provision "ansible" do |ansible|
+  	ansible.playbook = "provision/vagrant.yml"
+  end
 
 end
