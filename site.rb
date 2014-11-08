@@ -80,21 +80,22 @@ end
 
 get '/auth/:provider/callback' do
   content_type 'application/json'
-  u_id = env['omniauth.auth']['uid']
-  u_first_name = env['omniauth.auth']['info']['first_name']
-  u_last_name = env['omniauth.auth']['info']['last_name']
-  u_email = env['omniauth.auth']['info']['email']
+  uid = env['omniauth.auth']['uid']
+  first_name = env['omniauth.auth']['info']['first_name']
+  last_name = env['omniauth.auth']['info']['last_name']
+  email = env['omniauth.auth']['info']['email']
+  gender = env['omniauth.auth']['extra']['raw_info']['gender']
   fb_token = env['omniauth.auth']['credentials']['token']
-  u_gender = env['omniauth.auth']['extra']['raw_info']['gender']
 
   user = User.new(
-  	:u_id => u_id,
-  	:u_first_name => u_first_name,
-  	:u_last_name => u_last_name,
-  	:u_email => u_email,
-  	:u_gender => u_gender,
+  	:uid => uid,
+  	:first_name => first_name,
+  	:last_name => last_name,
+  	:email => email,
+  	:gender => gender,
   	:fb_token => fb_token
   	)
+  ApiKey.create(:user_id => uid)
 
   if user.save
   	puts 'it saved!'

@@ -22,9 +22,30 @@ module CYOA
 		version 'v0.1'
 		format :json
 
+		helpers do
+
+			def authenticate!
+				# api_key = ApiKey.find_by_access_token(params[:access_token])
+				error!('401 Unauthorized', 401) unless current_user
+			end
+
+			def current_user
+				# access_token = params[:access_token]
+				access_token = headers['Authorization']
+				token = ApiKey.find_by_access_token(access_token)
+				if token
+					@current_user = User.find(token.user_id)
+				else
+					false
+				end
+			end
+
+		end
+
 		get do
 			# return "it works on heroku!"
-			ENV["RACK_ENV"]
+			authenticate!
+			@current_user
 		end
 
 		resource :scenarios do

@@ -13,6 +13,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 
 gem 'omniauth-facebook'
+gem 'bcrypt-ruby'
 
 group :development do
 	gem 'shotgun'

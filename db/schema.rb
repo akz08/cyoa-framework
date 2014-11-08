@@ -11,19 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030000400) do
+ActiveRecord::Schema.define(version: 20141108222619) do
 
-  create_table "users", force: true do |t|
-    t.string   "u_id"
-    t.string   "u_first_name"
-    t.string   "u_last_name"
-    t.string   "u_gender"
-    t.string   "u_email"
-    t.string   "fb_token"
+  create_table "api_keys", force: true do |t|
+    t.string   "access_token",                null: false
+    t.integer  "user_id",                     null: false
+    t.boolean  "active",       default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "users", ["u_id"], name: "index_users_on_u_id"
+  add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true
+  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
+
+  create_table "users", id: false, force: true do |t|
+    t.string   "uid",        null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "gender"
+    t.string   "email"
+    t.string   "fb_token",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["uid"], name: "index_users_on_uid", unique: true
 
 end

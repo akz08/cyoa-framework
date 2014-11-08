@@ -1,14 +1,15 @@
 class CreateUsers < ActiveRecord::Migration
   def change
-  	create_table :users do |t|
-  		t.string :u_id
-  		t.string :u_first_name
-  		t.string :u_last_name
-  		t.string :u_gender
-  		t.string :u_email
-  		t.string :fb_token
+  	create_table :users, :id => false do |t|
+  		t.string :uid,      null: false
+  		t.string :first_name
+  		t.string :last_name
+  		t.string :gender
+  		t.string :email
+  		t.string :fb_token,     null: false
+      # t.string :app_token
   		t.timestamps
   	end
-  	add_index :users, :u_id
+  	add_index :users, ['uid'], unique: true
   end
 end
