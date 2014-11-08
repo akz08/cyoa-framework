@@ -41,3 +41,6 @@ build/
 
 # Environment variables
 /config/environment_variables.yml
+
+# Database
+*.db
