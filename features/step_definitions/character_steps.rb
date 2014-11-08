@@ -1,19 +1,26 @@
 Given(/^the system knows about the following characters$/) do |characters|
-  # table is a Cucumber::Ast::Table
-  # @characters = characters.hashes
-  pending # express the regexp above with the code you wish you had
+  characters.hashes.each do |attributes|
+  	FactoryGirl.create(:character, attributes)
+  end
 end
 
 When(/^the client requests a list of ([a-z]+)$/) do |type|
-	puts type
-	pending
+  get('/v0.1/' + type)
 end
 
-Then(/^the response is a list containing (\d+) characters$/) do |count|
-  pending # express the regexp above with the code you wish you had
+Then(/^the response is a list containing (#{CAPTURE_NUMBER}) characters$/) do |count|
+  data = MultiJson.load(last_response.body)
+  expect(data.count).to eq(count)
 end
 
-Then(/^one character has the following attributes:$/) do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+Then(/^(#{CAPTURE_NUMBER}) character has the following attributes:$/) do |count, table|
+	# discard type for now
+	expected_item = table.hashes.each_with_object({}) do |row, hash|
+		name, value = row['attribute'], row['value']
+		hash[name] = value
+	end
+	data = MultiJson.load(last_response.body)
+	puts data
+	matched_items = data.select { |item| item == expected_item }
+	expect(matched_items.count).to eq(count)
 end

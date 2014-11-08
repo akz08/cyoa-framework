@@ -8,15 +8,15 @@ Feature: Retrieve character list
 
 	Scenario: List all characters
 		Given the system knows about the following characters
-		|	id		|	name		|	description				|
-		|	EDV0	|	Claire		|	A 26 year old womman.	|
+		|	char_id	|	name		|	description				|
+		|	EDV0	|	Claire		|	A 26 year old woman.	|
 		|	EDV1	|	Otis		|	A 23 year old man.		|
 
 		When the client requests a list of characters
 		Then the response is a list containing 2 characters
-		And one character has the following attributes:
+		And 1 character has the following attributes:
 		|	attribute 	|	type	|	value					|
-		|	id			|	String	|	EDV0					|
+		|	char_id		|	String	|	EDV0					|
 		|	name		|	String	|	Claire					|
 		|	description	|	String	|	A 26 year old woman.	|
 
