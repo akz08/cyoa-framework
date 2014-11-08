@@ -1,6 +1,10 @@
 require 'rubygems'
 require 'grape' 
 require 'json'
+require 'sinatra/activerecord'
+
+
+require_relative '../models/character'
 
 
 ### MOBILE CLIENT API
@@ -27,7 +31,13 @@ module CYOA
 
 			desc "Return all available character ids"
 			get do
-				# return all_available_character_ids
+				# Hacky way to remove ids before returning
+				all_characters = Character.all
+				all_characters_hash = all_characters.as_json
+				all_characters_hash.each do |char|
+					char.delete("id")
+				end
+				all_characters_hash
 			end
 
 			desc "Return static information"

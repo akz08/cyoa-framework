@@ -20,7 +20,6 @@ Then(/^(#{CAPTURE_NUMBER}) character has the following attributes:$/) do |count,
 		hash[name] = value
 	end
 	data = MultiJson.load(last_response.body)
-	puts data
 	matched_items = data.select { |item| item == expected_item }
 	expect(matched_items.count).to eq(count)
 end
