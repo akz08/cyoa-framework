@@ -1,3 +1,4 @@
 development:
- adapter: sqlite3
- database: db/sqlite3:cyoa.db
+  adapter: postgresql
+  database: cyoa
+  host: localhost

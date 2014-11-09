@@ -1,3 +1,6 @@
+require 'dotenv'
+Dotenv.load
+
 require 'rubygems'
 require 'grape' 
 require 'json'
@@ -5,6 +8,8 @@ require 'json'
 require 'sinatra/activerecord'
 
 require_relative 'models/init'
+
+
 
 ### MOBILE CLIENT API
 
@@ -42,10 +47,40 @@ module CYOA
 
 		end
 
+		get '/test' do 
+			@user = User.new
+			@user.uid = 'test'
+			@user.fb_token = 'test token'
+			@user.save
+		end
+
 		get do
 			# return "it works on heroku!"
 			authenticate!
 			@current_user
+		end
+
+		resource :register do
+			# deal with a user registering with a uid and facebook token
+
+			# check if uid already exists
+
+			# if no, 
+			# this may be a brand new user
+				# in which case, get the uid and fb_token from the user as request body
+				# test to see if the fb token works
+				# double check the uid matches (may not be needed...)
+				# grab the data and create a new user
+				# create an app token for the user
+				# return the app token with a good response!
+
+			# if yes,
+			# or an existing user on a new device
+				# also get the uid and fb_token from the user as request body
+				# test to see if the fb token works
+				# if it does, update the fb token on record
+				# retun the app token with a good response!
+
 		end
 
 		resource :scenarios do

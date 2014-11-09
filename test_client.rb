@@ -38,5 +38,5 @@ fbconn = Faraday.new "https://graph.facebook.com" do |conn|
 	conn.adapter Faraday.default_adapter
 end
 
-response = fbconn.get '/v2.1/me?fields=id,name,email'
+response = fbconn.get '/v2.1/me?fields=id,name,email,gender'
 p response.body

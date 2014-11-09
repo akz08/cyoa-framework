@@ -1,12 +1,12 @@
 class CreateUsers < ActiveRecord::Migration
   def change
   	create_table :users, :id => false do |t|
-  		t.string :uid,      null: false
+  		t.integer :uid, :limit => 8,     null: false
   		t.string :first_name
   		t.string :last_name
   		t.string :gender
-  		t.string :email
-  		t.string :fb_token,     null: false
+  		t.text :encrypted_email
+  		t.text :encrypted_fb_token
       # t.string :app_token
   		t.timestamps
   	end

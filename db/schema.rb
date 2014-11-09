@@ -13,28 +13,31 @@
 
 ActiveRecord::Schema.define(version: 20141108222619) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "api_keys", force: true do |t|
-    t.string   "access_token",                null: false
-    t.integer  "user_id",                     null: false
-    t.boolean  "active",       default: true, null: false
+    t.string   "access_token",                          null: false
+    t.integer  "user_id",      limit: 8,                null: false
+    t.boolean  "active",                 default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true
-  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
+  add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true, using: :btree
+  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id", using: :btree
 
   create_table "users", id: false, force: true do |t|
-    t.string   "uid",        null: false
+    t.integer  "uid",                limit: 8, null: false
     t.string   "first_name"
     t.string   "last_name"
     t.string   "gender"
-    t.string   "email"
-    t.string   "fb_token",   null: false
+    t.text     "encrypted_email"
+    t.text     "encrypted_fb_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "users", ["uid"], name: "index_users_on_uid", unique: true
+  add_index "users", ["uid"], name: "index_users_on_uid", unique: true, using: :btree
 
 end
