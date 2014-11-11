@@ -1,7 +1,11 @@
+production:
+ adapter: sqlite3
+ database: db/sqlite3:cyoa-prod.db
+
 development:
  adapter: sqlite3
- database: db/sqlite3:cyoa.db
+ database: db/sqlite3:cyoa-dev.db
 
 test:
  adapter: sqlite3
- database: db/sqlite3:cyoatest.db
+ database: db/sqlite3:cyoa-test.db
