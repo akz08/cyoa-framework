@@ -6,6 +6,43 @@
    - build-essential
    - git-core
 
+- name: Install SQLite3 development headers 
+  sudo: True
+  apt: name=libsqlite3-dev
+
+- name: Install Apache
+  sudo: True
+  apt: name=apache2
+
+- name: Add key for Phusion Passenger repository
+  sudo: True
+  apt_key: url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x561F9B9CAC40B2F7 id=AC40B2F7 state=present
+
+- name: Add support for HTTPS
+  sudo: True
+  apt: name={{ item }}
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+
+- name: Add Phusion Passenger repository
+  sudo: True
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main' state=present update_cache=yes
+
+- name: Install Phusion Passenger
+  sudo: True
+  apt: name=libapache2-mod-passenger update_cache=yes
+
+- name: Enable Phusion Passenger Apache module
+  sudo: True
+  shell: a2enmod passenger
+
+- name: Write basic Apache conf
+  sudo: True
+  template: 
+   src=apache-site.conf
+   dest=/etc/apache2/sites-available/000-default.conf
+
 - name: Install Ruby 2.0
   sudo: True
   apt: name={{ item }} state=latest
@@ -22,7 +59,16 @@
   file: src=/usr/bin/gem2.0 dest=/usr/local/bin/gem state=link
 
 - name: Install Bundler
-  gem: name=bundler state=latest
+  sudo: True
+  shell: gem install bundler
 
 - name: Install gems in Gemfile
   shell: bundle install chdir=/vagrant
+
+- name: Setup production database
+  shell: rake db:setup RACK_ENV=production chdir=/vagrant
+
+- name: Restart Apache
+  sudo: True
+  shell: service apache2 restart
+
