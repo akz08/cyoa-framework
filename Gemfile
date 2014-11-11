@@ -10,6 +10,11 @@ gem 'faraday'
 gem 'grape'
 gem 'multi_json'
 
+# for push notifications
+gem 'rpush'
+
+gem 'pushmeup'
+
 group :development do
 	gem 'shotgun'
 	gem 'rake'

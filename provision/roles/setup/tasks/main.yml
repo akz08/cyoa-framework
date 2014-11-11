@@ -6,6 +6,10 @@
    - build-essential
    - git-core
 
+- name: Install SQLite3 Development Headers
+  sudo: True
+  apt: name=libsqlite3-dev
+
 - name: Install Ruby 2.0
   sudo: True
   apt: name={{ item }} state=latest
