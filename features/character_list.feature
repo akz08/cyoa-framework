@@ -8,16 +8,23 @@ Feature: Retrieve character list
 
 	Scenario: List all characters
 		Given the system knows about the following characters
-		|	char_id	|	name		|	description				|
-		|	EDV0	|	Claire		|	A 26 year old woman.	|
-		|	EDV1	|	Otis		|	A 23 year old man.		|
+		|	char_id	|	name		|	age		|	description					|
+		|	EDV0	|	Claire		|	26		|	An unusually happy woman.	|
+		|	EDV1	|	Otis		|	23		|	A grumpy young man.			|
 
 		When the client requests a list of characters
 		Then the response is a list containing 2 characters
 		And 1 character has the following attributes:
-		|	attribute 	|	type	|	value					|
-		|	char_id		|	String	|	EDV0					|
-		|	name		|	String	|	Claire					|
-		|	description	|	String	|	A 26 year old woman.	|
+		|	attribute 	|	type	|	value						|
+		|	char_id		|	String	|	EDV0						|
+		|	name		|	String	|	Claire						|
+		|	age			|	Integer	|	26							|
+		|	description	|	String	|	An unusually happy woman.	|
+		And 1 character has the following attributes:
+		|	attribute 	|	type	|	value						|
+		|	char_id		|	String	|	EDV1						|
+		|	name		|	String	|	Otis						|
+		|	age			|	Integer	|	23							|
+		|	description	|	String	|	A grumpy young man.			|
 
 	Scenario: List player's available characters

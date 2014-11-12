@@ -16,8 +16,8 @@ end
 Then(/^(#{CAPTURE_NUMBER}) character has the following attributes:$/) do |count, table|
 	# discard type for now
 	expected_item = table.hashes.each_with_object({}) do |row, hash|
-		name, value = row['attribute'], row['value']
-		hash[name] = value
+		name, value, type = row['attribute'], row['value'], row['type']
+		hash[name] = value.to_type(type.constantize)
 	end
 	data = MultiJson.load(last_response.body)
 	matched_items = data.select { |item| item == expected_item }
