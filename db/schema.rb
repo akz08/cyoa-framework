@@ -18,14 +18,14 @@ ActiveRecord::Schema.define(version: 20141108222619) do
 
   create_table "api_keys", force: true do |t|
     t.string   "access_token",                          null: false
-    t.integer  "user_id",      limit: 8,                null: false
+    t.integer  "uid",          limit: 8,                null: false
     t.boolean  "active",                 default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true, using: :btree
-  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id", using: :btree
+  add_index "api_keys", ["uid"], name: "index_api_keys_on_uid", using: :btree
 
   create_table "users", id: false, force: true do |t|
     t.integer  "uid",                limit: 8, null: false

@@ -3,6 +3,8 @@ class ApiKey < ActiveRecord::Base
 
 	belongs_to :user
 
+	validates :uid, presence: true
+
 	private
 
 	def generate_access_token

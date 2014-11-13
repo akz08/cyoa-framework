@@ -4,6 +4,8 @@ require 'attr_encrypted'
 
 class User < ActiveRecord::Base
 
+	has_many :api_keys, dependent: :destroy
+
 	attr_encrypted :fb_token, :key => ENV['ENCRYPT_KEY']
 	attr_encrypted :email, :key => ENV['ENCRYPT_KEY']
 	self.primary_key = "uid"
