@@ -87,21 +87,22 @@ get '/auth/:provider/callback' do
   gender = env['omniauth.auth']['extra']['raw_info']['gender']
   fb_token = env['omniauth.auth']['credentials']['token']
 
-  user = User.new(
-  	:uid => uid,
-  	:first_name => first_name,
-  	:last_name => last_name,
-  	:email => email,
-  	:gender => gender,
-  	:fb_token => fb_token
-  	)
-  ApiKey.create(:user_id => uid)
+  # user = User.new(
+  # 	:uid => uid,
+  # 	:first_name => first_name,
+  # 	:last_name => last_name,
+  # 	:email => email,
+  # 	:gender => gender,
+  # 	:fb_token => fb_token
+  # 	)
+  # ApiKey.create(:uid => uid)
 
-  if user.save
-  	puts 'it saved!'
-  else
-  	puts "it didn't save :("
-  end
+  # if user.save
+  # 	puts 'it saved!'
+  # else
+  # 	puts "it didn't save :("
+  # end
+  
   MultiJson.encode(request.env['omniauth.auth'])
 end
 
