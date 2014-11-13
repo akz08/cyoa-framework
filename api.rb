@@ -24,7 +24,7 @@ require_relative 'models/init'
 module CYOA
 	class API < Grape::API
 
-		version 'v0.1'
+		version 'v0.1', using: :param # so ?apiver=v0.1
 		format :json
 
 		helpers do
@@ -35,51 +35,93 @@ module CYOA
 			end
 
 			def current_user
-				# access_token = params[:access_token]
-				access_token = headers['Authorization']
+				# Retreive token from headers
+				access_token = ""
+
+				(/^Token token="(?<token>\w+)"*$/).match(headers['Authorization']) do |m|
+					access_token = m[:token]
+					puts m[:token]
+				end
+
 				token = ApiKey.find_by_access_token(access_token)
 				if token
-					@current_user = User.find(token.user_id)
+					@current_user = User.find(token.uid)
 				else
 					false
 				end
 			end
 
-		end
+			def current_user=(user)
+				@current_user = user
+			end
 
-		get '/test' do 
-			@user = User.new
-			@user.uid = 'test'
-			@user.fb_token = 'test token'
-			@user.save
+			def facebook_token_valid?(token)
+				# TODO: check validity of facebook token
+				true
+			end
+
 		end
 
 		get do
-			# return "it works on heroku!"
 			authenticate!
-			@current_user
+			return "You've been authenticated!"
 		end
 
-		resource :register do
-			# deal with a user registering with a uid and facebook token
+		resource :authenticate do
+			params do
+				requires :uid, type: Integer, desc: "Facebook user id."
+				requires :fb_token, type: String, desc: "A valid Facebook token."
 
-			# check if uid already exists
+				optional :first_name, type: String, desc: "User's first name."
+				optional :last_name, type: String, desc: "User's last name."
+				optional :email, type: String, desc: "User's email."
+			end
 
-			# if no, 
-			# this may be a brand new user
-				# in which case, get the uid and fb_token from the user as request body
-				# test to see if the fb token works
-				# double check the uid matches (may not be needed...)
-				# grab the data and create a new user
-				# create an app token for the user
-				# return the app token with a good response!
+			desc "Authenticate a user with a facebook uid and token"
+			post do
+				# first, check if the facebook token works!
+				error!('400 Invalid Facebook token', 400) unless facebook_token_valid?(params['fb_token'])
 
-			# if yes,
-			# or an existing user on a new device
-				# also get the uid and fb_token from the user as request body
-				# test to see if the fb token works
-				# if it does, update the fb token on record
-				# retun the app token with a good response!
+				# then check if uid already exists
+        		begin 
+        			user = User.find(params['uid'])
+        		rescue ActiveRecord::RecordNotFound
+					# if no, 
+					# this may be a brand new user
+						# in which case, get the uid and fb_token from the user as request body
+						# grab the data and create a new user
+						# create an app token for the user
+						# return the app token with a good response!
+        			user = User.new(
+        				:uid => params['uid'],
+        				:fb_token => params['fb_token'],
+        				:first_name => params['first_name'],
+        				:last_name => params['last_name'],
+        				:email => params['email']
+        				)
+
+        			if user.save
+        				ApiKey.create(:uid => params['uid'])
+        				token = ApiKey.find_by(:uid => params['uid']).access_token
+        				status 201
+        				return { :token => token }.to_json
+        			else
+        				puts "the user didn't save!"
+        			end
+        		end
+
+				# if yes,
+				# or an existing user on a new device
+					# also get the uid and fb_token from the user as request body
+					# TODO: update the fb token on record
+					# return the app token with a good response!
+
+        		# Assuming there only exists one token for this uid
+        		token = ApiKey.find_by(:uid => params['uid']).access_token
+        		status 200
+        		return { :token => token }.to_json
+
+			end
 
 		end
 
@@ -88,6 +130,7 @@ module CYOA
 			desc "Return all available scenario ids"
 			get do
 				# return all_available_scenario_ids
+				"all scenario ids"
 			end
 
 			desc "Return static information"
