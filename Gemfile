@@ -2,16 +2,22 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'colorize'
+gem 'faraday'
+gem 'multi_json'
 
 gem 'sinatra'
+gem 'grape'
 gem 'sinatra-activerecord'
 gem 'sqlite3'
-gem 'faraday'
-gem 'grape'
-gem 'multi_json'
+
+# authentication
+gem 'omniauth-facebook'
+gem 'attr_encrypted'
+gem 'dotenv'
 
 group :development do
 	gem 'shotgun'
+	gem 'tux'
 	gem 'rake'
 end
 
