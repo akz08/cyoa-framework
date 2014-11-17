@@ -1,6 +1,8 @@
 require 'attr_encrypted'
 
 class User < ActiveRecord::Base
+	has_many :api_keys, dependent: :destroy
+
 	validates_presence_of :uid, :on => :create
 	validates_presence_of :fb_token, :on => :create
 	self.primary_key = "uid"
