@@ -11,12 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141108182509) do
+ActiveRecord::Schema.define(version: 20141117160718) do
 
   create_table "characters", force: true do |t|
     t.string "char_id"
     t.string "name"
     t.text   "description"
   end
+
+  create_table "users", id: false, force: true do |t|
+    t.integer  "uid",                limit: 8, null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "gender"
+    t.text     "encrypted_email"
+    t.text     "encrypted_fb_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["uid"], name: "index_users_on_uid", unique: true
 
 end
