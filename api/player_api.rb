@@ -26,8 +26,73 @@ module CYOA
 		version 'v0.1'
 		format :json
 
-		get do
-			return "it works on heroku!"
+		helpers do
+			def authenticate!
+				error!('401 Unauthorized', 401) unless current_user
+			end
+
+			def current_user
+				access_token = ''
+				(/^Token token="(?<token>\w+)"*$/).match(headers['Authorization']) do |m|
+					access_token = m[:token]
+					puts m[:token]
+				end
+
+				token = ApiKey.find_by_access_token(access_token)
+				if token
+					@current_user = User.find(token.uid)
+				else
+					false
+				end
+			end
+
+			def current_user=(user)
+				@current_user = user
+			end
+
+			def facebook_token_valid?(token)
+				# TODO: check validity of facebook token
+				true
+			end
+		end
+
+		resource :auth do
+			params do
+				requires :uid, type: Integer, desc: "Facebook user id."
+				requires :fb_token, type: String, desc: "A valid Facebook access token."
+
+				optional :first_name, type: String, desc: "User's first name."
+				optional :last_name, type: String, desc: "User's last name."
+				optional :email, type: String, desc: "User's email."
+			end
+
+			desc "Authenticate a user with a Facebook uid and access token"
+			post do
+				error!('400 Invalid Facebook token', 400) unless facebook_token_valid?(params['fb_token'])
+				begin 
+					user = User.find(params['uid'])
+				rescue ActiveRecord::RecordNotFound
+					user = User.new(
+						:uid => params['uid'],
+						:fb_token => params['fb_token'],
+						:first_name => params['first_name'],
+						:last_name => params['last_name'],
+						:email => params['email']
+						)
+
+					if user.save
+						ApiKey.create(:uid => params['uid'])
+						token = ApiKey.find_by(:uid => params['uid']).access_token
+						status 201
+						return { :token => token }.to_json
+					else
+						puts "the user didn't save!" # TODO: handle this properly
+					end
+				end
+				token = ApiKey.find_by(:uid => params['uid']).access_token
+				status 200
+				return { :token => token }.to_json
+			end
 		end
 
 		resource :characters do
