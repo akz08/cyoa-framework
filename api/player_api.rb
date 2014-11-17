@@ -1,10 +1,13 @@
+require 'dotenv'
+Dotenv.load
+
 require 'rubygems'
 require 'grape' 
 require 'json'
 require 'sinatra/activerecord'
 
 
-require_relative '../models/character'
+require_relative '../models/init'
 
 
 ### MOBILE CLIENT API
