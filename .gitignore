@@ -44,5 +44,6 @@ build/
 
 # Database
 *.db
+/db/schema.rb
 
 .env
