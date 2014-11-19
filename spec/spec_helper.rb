@@ -26,12 +26,12 @@ def get_json(path)
 end
 
 def post_json(url, data)
-	post(url, json(data), { "Content-Type" => "application/json" })
+	post(url, json(data), "CONTENT_TYPE" => "application/json")
 	json_parse(last_response.body)
 end
 
 def put_json(url, data)
-	put(url, json(data), { "Content-Type" => "application/json" })
+	put(url, json(data), "CONTENT_TYPE" => "application/json")
 	json_parse(last_response.body)
 end
 
