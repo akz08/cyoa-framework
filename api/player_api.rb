@@ -8,6 +8,7 @@ require 'sinatra/activerecord'
 
 
 require_relative '../models/init'
+require_relative '../lib/player'
 
 
 ### MOBILE CLIENT API
@@ -25,6 +26,15 @@ module CYOA
 
 		version 'v0.1'
 		format :json
+
+		# content_type :json, "application/json"
+		post "test" do
+			params do
+				requires :uid, type: Integer, desc: "Facebook user id."
+				requires :fb_token, type: String, desc: "A valid Facebook access token."
+			end
+			params['uid']
+		end
 
 		helpers do
 			def authenticate!
@@ -70,28 +80,30 @@ module CYOA
 			post do
 				error!('400 Invalid Facebook token', 400) unless facebook_token_valid?(params['fb_token'])
 				begin 
-					user = User.find(params['uid'])
+					player = Game::Player.find(params['uid'])
 				rescue ActiveRecord::RecordNotFound
-					user = User.new(
+					player = Game::Player.new(
+						User.new(
 						:uid => params['uid'],
 						:fb_token => params['fb_token'],
 						:first_name => params['first_name'],
 						:last_name => params['last_name'],
 						:email => params['email']
 						)
+						)
 
-					if user.save
+					if player.user.save
 						ApiKey.create(:uid => params['uid'])
 						token = ApiKey.find_by(:uid => params['uid']).access_token
 						status 201
-						return { :token => token }.to_json
+						return { :token => token }
 					else
 						puts "the user didn't save!" # TODO: handle this properly
 					end
 				end
 				token = ApiKey.find_by(:uid => params['uid']).access_token
 				status 200
-				return { :token => token }.to_json
+				return { :token => token }
 			end
 		end
 

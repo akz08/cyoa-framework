@@ -24,7 +24,7 @@ end
 group :test do
 	gem 'factory_girl'
 	gem 'cucumber', '~> 1.3.17'
-	gem 'rspec'
+	gem 'rspec','~> 3.1.0'
 	gem 'rack-test'
 	gem 'activesupport'
 	gem 'database_cleaner'

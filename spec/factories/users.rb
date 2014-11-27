@@ -8,4 +8,8 @@ FactoryGirl.define do
 		email "bob@smith.com"
 	end
 	
+	factory :api_key do
+		uid "0000000000"
+		access_token "app-access-token"
+	end
 end
