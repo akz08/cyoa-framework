@@ -66,7 +66,7 @@
   shell: bundle install chdir=/vagrant
 
 - name: Setup production database
-  shell: rake db:setup RACK_ENV=production chdir=/vagrant
+  shell: rake db:migrate RACK_ENV=production chdir=/vagrant
 
 - name: Restart Apache
   sudo: True

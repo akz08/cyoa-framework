@@ -7,6 +7,7 @@ FactoryGirl.find_definitions
 Dir[File.dirname(__FILE__)+"/support/*.rb"].each {|file| require file }
 
 require "rspec"
+require "rspec/active_model/mocks"
 require "rack/test"
 require "sinatra"
 require "sinatra/activerecord"
@@ -14,9 +15,9 @@ require "sinatra/activerecord"
 require_relative "../api/player_api"
 
 # Automigrate if necessary (since we're using the test environment)
-if ActiveRecord::Migrator.needs_migration?
-	ActiveRecord::Migrator.migrate(File.join('./', 'db/migrate'))
-end
+# if ActiveRecord::Migrator.needs_migration?
+# 	ActiveRecord::Migrator.migrate(File.join('./', 'db/migrate'))
+# end
 
 # JSON helpers
 
@@ -54,19 +55,19 @@ RSpec.configure do |config|
 
 	config.color = true
 
-	config.before(:suite) do
-		DatabaseCleaner.strategy = :transaction
-		DatabaseCleaner.clean_with :transaction
+	# config.before(:suite) do
+	# 	DatabaseCleaner.strategy = :transaction
+	# 	DatabaseCleaner.clean_with :transaction
 
-	end
+	# end
 
-	config.before(:each) do
-		DatabaseCleaner.start
-	end
+	# config.before(:each) do
+	# 	DatabaseCleaner.start
+	# end
 
-	config.after(:each) do
-		DatabaseCleaner.clean
-	end
+	# config.after(:each) do
+	# 	DatabaseCleaner.clean
+	# end
 end
 
 FactoryGirl.register_strategy(:json, JsonStrategy)

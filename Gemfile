@@ -25,6 +25,7 @@ group :test do
 	gem 'factory_girl'
 	gem 'cucumber', '~> 1.3.17'
 	gem 'rspec','~> 3.1.0'
+	gem 'rspec-activemodel-mocks'
 	gem 'rack-test'
 	gem 'activesupport'
 	gem 'database_cleaner'

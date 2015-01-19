@@ -1,9 +1,9 @@
 class CreateMessages < ActiveRecord::Migration
   def change
   	create_table :messages do |t|
-  		t.integer :choice_id
-  		t.string :text
-  		t.integer :seconds_delay, default: 1
+  		t.integer :scene_id,		null: false
+  		t.string :text,				null: false
+  		t.integer :seconds_delay, 	default: 1
   	end
   end
 end

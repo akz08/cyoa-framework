@@ -8,7 +8,7 @@ require 'sinatra/activerecord'
 
 
 require_relative '../models/init'
-require_relative '../lib/player'
+require_relative '../lib/game'
 
 
 ### MOBILE CLIENT API
@@ -80,19 +80,17 @@ module CYOA
 			post do
 				error!('400 Invalid Facebook token', 400) unless facebook_token_valid?(params['fb_token'])
 				begin 
-					player = Game::Player.find(params['uid'])
+					user = User.find(params['uid'])
 				rescue ActiveRecord::RecordNotFound
-					player = Game::Player.new(
-						User.new(
+					user = User.new(
 						:uid => params['uid'],
 						:fb_token => params['fb_token'],
 						:first_name => params['first_name'],
 						:last_name => params['last_name'],
 						:email => params['email']
 						)
-						)
 
-					if player.user.save
+					if user.save
 						ApiKey.create(:uid => params['uid'])
 						token = ApiKey.find_by(:uid => params['uid']).access_token
 						status 201
@@ -112,12 +110,13 @@ module CYOA
 			desc "Return all available character ids"
 			get do
 				# Hacky way to remove ids before returning
-				all_characters = Character.all
-				all_characters_hash = all_characters.as_json
-				all_characters_hash.each do |char|
-					char.delete("id")
-				end
-				all_characters_hash
+				# all_characters = Character.all
+				# all_characters_hash = all_characters.as_json
+				# all_characters_hash.each do |char|
+				# 	char.delete("id")
+				# end
+				# all_characters_hash
+				return [{ character_id: "CYOA0", character_name: "Abba", character_age: 99, character_description: "Some person"}]
 			end
 
 			desc "Return static information"
@@ -128,6 +127,10 @@ module CYOA
 			desc "Return user progress information"
 			get ":unique_character_id/progress" do
 
+			end
+
+			delete do
+				# repopulate data to seed
 			end
 
 		end
@@ -142,6 +145,10 @@ module CYOA
 
 			desc "Return scene information"
 			get :scene_id do
+			end
+
+			delete do
+				# repopulate data to seed
 			end
 		end
 
@@ -167,6 +174,18 @@ module CYOA
 
 				# returns the next message(s)
 
+			end
+
+			delete do
+				# repopulate data to seed
+			end
+
+		end
+
+		resource :choices do
+
+			delete do
+				# repopulate data to seed
 			end
 
 		end
