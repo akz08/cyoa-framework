@@ -106,6 +106,7 @@ module CYOA
 		end
 
 		resource :characters do
+			# requires an app token parameter to access
 
 			desc "Return all available character ids"
 			get do
@@ -116,12 +117,15 @@ module CYOA
 				# 	char.delete("id")
 				# end
 				# all_characters_hash
-				return [{ character_id: "CYOA0", character_name: "Abba", character_age: 99, character_description: "Some person"}]
+
+				# calls all the characters that a user has access to
+				return [{ character_id: "0", character_name: "Abba", character_age: 99, character_description: "Some person"},
+						{ character_id: "1", character_name: "Bob", character_age: 64, character_description: "Another person"}]
 			end
 
 			desc "Return static information"
 			get :unique_character_id do
-				# return character specific information
+				# return character specific informatione
 			end
 
 			desc "Return user progress information"
@@ -137,10 +141,12 @@ module CYOA
 
 		resource :scenes do
 			# REQUIRES 
-				# a parameter corresponding to character id
+				# requires an app token parameter to access
 
 			desc "Return available scene ids"
 			get  do
+				return [{ scene_id: "0", character_id: "0", scene_information: "Some information" },
+						{ scene_id: "1", character_id: "1", scene_information: "Some information" }]
 			end
 
 			desc "Return scene information"
@@ -166,6 +172,8 @@ module CYOA
 					# return first message(s)
 
 				# if scene id specified, only return for that scene
+				return [{ message_id: "0", scene_id: "0", message_text: "Hi there! I'm some text.", date_time: "01/01/11" },
+						{ message_id: "1", scene_id: "0", message_text: "Yo.", date_time: "01/01/12" }]
 			end
 
 			desc "Updates user log and returns next messages" 
@@ -173,7 +181,10 @@ module CYOA
 				# update the store
 
 				# returns the next message(s)
-
+				return { message_id: "0", scene_id: "0", message_text: "Hi there! I'm some text.", date_time: "01/01/11", 
+					choices: [{choice_id: 3, message_id: 1, choice_text: "This is a choice text", date_time: "null"},
+								{choice_id: 4, message_id: 1, choice_text: "This is a choice text", date_time: "null"},
+								{choice_id: 5, message_id: 1, choice_text: "This is a choice text", date_time: "null"}] }
 			end
 
 			delete do
@@ -183,6 +194,13 @@ module CYOA
 		end
 
 		resource :choices do
+
+			get do
+				return [{ choice_id: 0, message_id: 0, choice_text: "This is a choice text", date_time: "01/01/11" },
+					{choice_id: 3, message_id: 1, choice_text: "This is a choice text", date_time: "null"},
+					{choice_id: 4, message_id: 1, choice_text: "This is a choice text", date_time: "null"},
+					{choice_id: 5, message_id: 1, choice_text: "This is a choice text", date_time: "null"}]
+			end
 
 			delete do
 				# repopulate data to seed
