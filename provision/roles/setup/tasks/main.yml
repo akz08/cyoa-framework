@@ -6,9 +6,12 @@
    - build-essential
    - git-core
 
-- name: Install SQLite3 development headers 
+- name: Install SQLite3 with development headers 
   sudo: True
-  apt: name=libsqlite3-dev
+  apt: name={{ item }}
+  with_items:
+  - sqlite3
+  - libsqlite3-dev
 
 - name: Install Apache
   sudo: True
@@ -58,6 +61,10 @@
   sudo: True
   file: src=/usr/bin/gem2.0 dest=/usr/local/bin/gem state=link
 
+- name: Install zlib development headers
+  sudo: True
+  apt: name=zlib1g-dev
+
 - name: Install Bundler
   sudo: True
   shell: gem install bundler
@@ -65,10 +72,12 @@
 - name: Install gems in Gemfile
   shell: bundle install chdir=/vagrant
 
+- name: Migrate production database
+  shell: bundle exec rake db:migrate RACK_ENV=production chdir=/vagrant
+
 - name: Setup production database
-  shell: rake db:migrate RACK_ENV=production chdir=/vagrant
+  shell: bundle exec rake db:setup RACK_ENV=production chdir=/vagrant
 
 - name: Restart Apache
   sudo: True
   shell: service apache2 restart
-

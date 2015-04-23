@@ -1,3 +1,3 @@
-require './api/player_api'
+require './app/controllers/api'
 
 run CYOA::API

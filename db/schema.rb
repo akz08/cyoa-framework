@@ -11,9 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127170736) do
+ActiveRecord::Schema.define(version: 20150422110546) do
 
-  create_table "api_keys", force: true do |t|
+  create_table "api_keys", force: :cascade do |t|
     t.string   "access_token",                          null: false
     t.integer  "uid",          limit: 8,                null: false
     t.boolean  "active",                 default: true, null: false
@@ -24,32 +24,48 @@ ActiveRecord::Schema.define(version: 20141127170736) do
   add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true
   add_index "api_keys", ["uid"], name: "index_api_keys_on_uid"
 
-  create_table "characters", force: true do |t|
-    t.string  "char_id"
-    t.string  "name"
-    t.integer "age"
-    t.text    "description"
+  create_table "characters", force: :cascade do |t|
+    t.string  "name",        null: false
+    t.integer "age",         null: false
+    t.string  "gender",      null: false
+    t.text    "description", null: false
+    t.boolean "default",     null: false
   end
 
-  create_table "choices", force: true do |t|
-    t.integer "parent_message_id",                 null: false
-    t.integer "child_message_id",                  null: false
-    t.string  "text",                              null: false
-    t.boolean "skip",              default: false
+  create_table "messages", force: :cascade do |t|
+    t.integer "scene_id",  null: false
+    t.string  "text",      null: false
+    t.boolean "from_self", null: false
+    t.integer "parent_id", null: false
+    t.integer "delay"
   end
 
-  create_table "messages", force: true do |t|
-    t.integer "scene_id",                  null: false
-    t.string  "text",                      null: false
-    t.integer "seconds_delay", default: 1
+  add_index "messages", ["parent_id"], name: "index_messages_on_parent_id"
+  add_index "messages", ["scene_id"], name: "index_messages_on_scene_id"
+
+  create_table "scenes", force: :cascade do |t|
+    t.integer "character_id", null: false
+    t.text    "information",  null: false
   end
 
-  create_table "scenes", force: true do |t|
-    t.integer "character_id"
-    t.string  "information"
+  add_index "scenes", ["character_id"], name: "index_scenes_on_character_id"
+
+  create_table "user_characters", id: false, force: :cascade do |t|
+    t.integer "user_id",      null: false
+    t.integer "character_id", null: false
   end
 
-  create_table "users", id: false, force: true do |t|
+  add_index "user_characters", ["user_id", "character_id"], name: "index_user_characters_on_user_id_and_character_id", unique: true
+
+  create_table "user_messages", id: false, force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "message_id", null: false
+    t.datetime "datetime",   null: false
+  end
+
+  add_index "user_messages", ["user_id", "message_id"], name: "index_user_messages_on_user_id_and_message_id", unique: true
+
+  create_table "users", id: false, force: :cascade do |t|
     t.integer  "uid",                limit: 8, null: false
     t.text     "encrypted_fb_token"
     t.string   "first_name"

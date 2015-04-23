@@ -7,8 +7,8 @@ require 'json'
 require 'sinatra/activerecord'
 
 
-require_relative '../models/init'
-require_relative '../lib/game'
+require_relative '../models/all'
+#require_relative '../controllers/TODO'
 
 
 ### MOBILE CLIENT API

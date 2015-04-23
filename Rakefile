@@ -1,2 +1,7 @@
 require 'sinatra/activerecord/rake'
-require './api/player_api'
+
+namespace :db do
+	task :load_config do
+		require "./app/controllers/api"
+	end
+end

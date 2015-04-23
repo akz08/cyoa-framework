@@ -4,6 +4,7 @@ ruby '2.0.0'
 gem 'colorize'
 gem 'faraday'
 gem 'multi_json'
+gem 'nokogiri'
 
 gem 'sinatra'
 gem 'grape'
