@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-	<character name="Amy" age="17" gender="Female" description="Is being verbally abused by her family because of her sexual orientation." default="0">
+	<character name="Amy" age="17" gender="Female" description="Is being verbally abused by her family because of her sexual orientation.">
 		<scene information="Around one in ten women (12%) have been victims of non-sexual family abuse.">
 			<message text="Hi, I'm Amy and I am 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it is making me very upset. What can I do?">
 				<response text="Keep trying to initiate conversation. They cannot ignore you forever.">

@@ -29,14 +29,14 @@ ActiveRecord::Schema.define(version: 20150422110546) do
     t.integer "age",         null: false
     t.string  "gender",      null: false
     t.text    "description", null: false
-    t.boolean "default",     null: false
+    t.boolean "add_on",      null: false
   end
 
   create_table "messages", force: :cascade do |t|
     t.integer "scene_id",  null: false
-    t.string  "text",      null: false
+    t.text    "text",      null: false
     t.boolean "from_self", null: false
-    t.integer "parent_id", null: false
+    t.integer "parent_id"
     t.integer "delay"
   end
 
