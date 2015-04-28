@@ -29,18 +29,17 @@ ActiveRecord::Schema.define(version: 20150422110546) do
     t.integer "age",         null: false
     t.string  "gender",      null: false
     t.text    "description", null: false
-    t.boolean "add_on",      null: false
+    t.boolean "is_add_on",   null: false
   end
 
   create_table "messages", force: :cascade do |t|
-    t.integer "scene_id",  null: false
-    t.text    "text",      null: false
-    t.boolean "from_self", null: false
-    t.integer "parent_id"
+    t.integer "scene_id",    null: false
+    t.text    "text",        null: false
+    t.boolean "is_incoming", null: false
     t.integer "delay"
+    t.integer "parent_id"
   end
 
-  add_index "messages", ["parent_id"], name: "index_messages_on_parent_id"
   add_index "messages", ["scene_id"], name: "index_messages_on_scene_id"
 
   create_table "scenes", force: :cascade do |t|

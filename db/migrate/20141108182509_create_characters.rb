@@ -5,7 +5,7 @@ class CreateCharacters < ActiveRecord::Migration
 			t.integer :age, null: false
 			t.string :gender, null: false
 			t.text :description, null: false
-			t.boolean :add_on, null: false
+			t.boolean :is_add_on, null: false
 		end
 	end
 end

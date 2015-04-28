@@ -1,6 +1,6 @@
 class Character < ActiveRecord::Base
 	has_many :scenes, dependent: :destroy
-	has_many :user_characters, dependent: :destroy
+	has_many :users, through: :user_characters, dependent: :destroy
 
 	validates :name, presence: true
 	validates :age, presence: true

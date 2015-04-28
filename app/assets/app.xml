@@ -2,14 +2,34 @@
 <root>
 	<character name="Amy" age="17" gender="Female" description="Is being verbally abused by her family because of her sexual orientation.">
 		<scene information="Around one in ten women (12%) have been victims of non-sexual family abuse.">
-			<message text="Hi, I'm Amy and I am 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it is making me very upset. What can I do?">
-				<response text="Keep trying to initiate conversation. They cannot ignore you forever.">
-					<message text="Okay, I'll keep trying. Thanks for the advice."></message>
-				</response>
-				<response text="Give it some time. This is new to them, and they just need some time to get used to it.">
-					<message text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message>
-				</response>
-			</message>
+			<message_in text="Hi, I'm Amy and I am 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it is making me very upset. What can I do?">
+				<message_out text="Keep trying to initiate conversation. They cannot ignore you forever.">
+					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
+				</message_out>
+				<message_out text="Give it some time. This is new to them, and they just need some time to get used to it.">
+					<message_in text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message_in>
+				</message_out>
+			</message_in>
+		</scene>
+		<scene information="Domestic violence commonly results in self-harm and attempted suicide.">
+			<message_in text="Today my mum approached me and told me to see some person about fixing my 'illness'. When I refused she slapped me and shouted, 'Why are you doing this to us?'">
+				<message_out text="Try seeking counselling for the family.">
+					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
+				</message_out>
+				<message_out text="You should move out. Physical violence is never acceptable.">
+					<message_in text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message_in>
+				</message_out>
+			</message_in>
+		</scene>
+		<scene information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
+			<message_in text="My parents missed one of my major cello recitals, and I was really hurt. Things are not looking up...">
+				<message_out text="Try giving them some distance. They'll come around.">
+					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
+				</message_out>
+				<message_out text="Give it some more time.">
+					<message_in text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message_in>
+				</message_out>
+			</message_in>
 		</scene>
 	</character>
 </root>

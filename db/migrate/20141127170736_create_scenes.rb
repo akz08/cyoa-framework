@@ -1,9 +1,8 @@
 class CreateScenes < ActiveRecord::Migration
 	def change
 		create_table :scenes do |t|
-			t.integer :character_id, null: false
+			t.references :character, null: false, index: true
 			t.text :information, null: false
 		end
-		add_index :scenes, :character_id
 	end
 end
