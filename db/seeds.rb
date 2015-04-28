@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 def self.main
-	# Set relative path to XML document containing the application seed data
+	# Set relative path to XML document containing application seed data
 	xmlDocPath = File.expand_path("../../app/assets/app.xml", __FILE__)
 	# Read specified XML document using Nokogiri
 	doc = Nokogiri::XML(File.open(xmlDocPath)) do |config|
@@ -14,7 +14,8 @@ def self.main
 		scene_node_set = node.xpath("scene")
 		for node in scene_node_set do
 			scene = create_scene(node, character.id)
-			create_messages(node.first_element_child, scene.id, nil)
+			create_scene_dependencies(scene.id, node, character.id)
+			create_messages_in_scene(node.first_element_child, scene.id, nil)
 		end
 	end
 end
@@ -47,20 +48,40 @@ def self.create_scene(scene_xml, character_id)
 	return scene
 end
 
+# Create records for the message dependencies on a scene
+# Params:
+# +scene_id+:: id of scene record
+# +scene_xml+:: Nokogiri element node containing scene information
+# +character_id+:: id of containing character record
+def self.create_scene_dependencies(scene_id, scene_xml, character_id)
+	dependencies = scene_xml.xpath("@requires_messages").to_s.delete(" ").split(",")
+	if !dependencies.empty? then
+		for dependency in dependencies do
+			# Get id of message record upon which scene is dependent
+			dep_xml_scene_id = dependency.split(":")[0].to_i
+			dep_xml_message_id = dependency.split(":")[1].to_i
+			dep_scene_id = Scene.where("character_id = ?", character_id)[dep_xml_scene_id - 1]["id"]
+			dep_message_id = Message.where("scene_id = ?", dep_scene_id)[dep_xml_message_id - 1]["id"]
+			# Create specified dependency record
+			SceneDependency.create(scene_id: scene_id, message_id: dep_message_id)
+		end
+	end
+end
+
 # Use pre-order depth-first search to sequentially create message records from a scene
 # Params:
 # +message_xml+:: Nokogiri element node containing message information
 # +scene_id+:: id of containing scene record
 # +parent_id+:: id of parent message record
-def self.create_messages(message_xml, scene_id, parent_id)
-	# Create record for the current message
+def self.create_messages_in_scene(message_xml, scene_id, parent_id)
+	# Create record for current message
 	message = create_message(message_xml, scene_id, parent_id)
 	# Recurse on all children, if any
 	children = message_xml.children
 	if !children.empty? then
 		parent_id = message.id
 		for child in children do
-			create_messages(child, scene_id, parent_id)
+			create_messages_in_scene(child, scene_id, parent_id)
 		end
 	end
 end

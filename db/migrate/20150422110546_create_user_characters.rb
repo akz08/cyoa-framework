@@ -1,6 +1,6 @@
 class CreateUserCharacters < ActiveRecord::Migration
 	def change
-		create_table :user_characters, :id => false do |t|
+		create_table :user_characters, id: false do |t|
 			t.references :user, null: false
 			t.references :character, null: false
 		end

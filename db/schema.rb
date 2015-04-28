@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422110546) do
+ActiveRecord::Schema.define(version: 20150426120012) do
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "access_token",                          null: false
@@ -41,6 +41,13 @@ ActiveRecord::Schema.define(version: 20150422110546) do
   end
 
   add_index "messages", ["scene_id"], name: "index_messages_on_scene_id"
+
+  create_table "scene_dependencies", id: false, force: :cascade do |t|
+    t.integer "scene_id",   null: false
+    t.integer "message_id", null: false
+  end
+
+  add_index "scene_dependencies", ["scene_id", "message_id"], name: "index_scene_dependencies_on_scene_id_and_message_id", unique: true
 
   create_table "scenes", force: :cascade do |t|
     t.integer "character_id", null: false

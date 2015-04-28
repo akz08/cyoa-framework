@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
+<iadvise>
 	<character name="Amy" age="17" gender="Female" description="Is being verbally abused by her family because of her sexual orientation.">
 		<scene information="Around one in ten women (12%) have been victims of non-sexual family abuse.">
 			<message_in text="Hi, I'm Amy and I am 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it is making me very upset. What can I do?">
@@ -11,7 +11,7 @@
 				</message_out>
 			</message_in>
 		</scene>
-		<scene information="Domestic violence commonly results in self-harm and attempted suicide.">
+		<scene requires_messages="1:3" information="Domestic violence commonly results in self-harm and attempted suicide.">
 			<message_in text="Today my mum approached me and told me to see some person about fixing my 'illness'. When I refused she slapped me and shouted, 'Why are you doing this to us?'">
 				<message_out text="Try seeking counselling for the family.">
 					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
@@ -21,7 +21,7 @@
 				</message_out>
 			</message_in>
 		</scene>
-		<scene information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
+		<scene requires_messages="1:5" information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
 			<message_in text="My parents missed one of my major cello recitals, and I was really hurt. Things are not looking up...">
 				<message_out text="Try giving them some distance. They'll come around.">
 					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
@@ -32,4 +32,4 @@
 			</message_in>
 		</scene>
 	</character>
-</root>
+</iadvise>

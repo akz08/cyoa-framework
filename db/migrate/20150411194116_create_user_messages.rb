@@ -1,6 +1,6 @@
 class CreateUserMessages < ActiveRecord::Migration
 	def change
-		create_table :user_messages, :id => false do |t|
+		create_table :user_messages, id: false do |t|
 			t.references :user, null: false
 			t.references :message, null: false
 			t.datetime :datetime, null: false
