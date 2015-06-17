@@ -83,4 +83,5 @@
 		</scene>
 
 	</character>
+	<character name="Kyle" age="15" gender="Male" description="Is living in a household where verbal abuse and aggressive behaviour is normal." is_add_on="1"></character>
 </iadvise>
