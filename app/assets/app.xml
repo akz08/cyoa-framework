@@ -1,35 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <iadvise>
 	<character name="Amy" age="17" gender="Female" description="Is being verbally abused by her family because of her sexual orientation.">
+		
 		<scene information="Around one in ten women (12%) have been victims of non-sexual family abuse.">
 			<message_in text="Hi, I'm Amy and I am 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it is making me very upset. What can I do?">
-				<message_out text="Keep trying to initiate conversation. They cannot ignore you forever.">
-					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
-				</message_out>
-				<message_out text="Give it some time. This is new to them, and they just need some time to get used to it.">
-					<message_in text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message_in>
-				</message_out>
+				<message_out text="Keep trying to initiate conversation. They cannot ignore you forever."></message_out>
+				<message_out text="Give it some time. This is new to them, and they just need some time to get used to it."></message_out>
 			</message_in>
 		</scene>
-		<scene requires_messages="1:3" information="Domestic violence commonly results in self-harm and attempted suicide.">
-			<message_in text="Today my mum approached me and told me to see some person about fixing my 'illness'. When I refused she slapped me and shouted, 'Why are you doing this to us?'">
-				<message_out text="Try seeking counselling for the family.">
-					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
-				</message_out>
-				<message_out text="You should move out. Physical violence is never acceptable.">
-					<message_in text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message_in>
-				</message_out>
+
+		<scene parent_messages="1:2" information="Domestic violence commonly results in self-harm and attempted suicide.">
+			<message_in text="Today my mum approached me and told me to see some person about fixing my 'illness'. When I refused she slapped me and shouted, 'Why are you doing this to us?!'">
+				<message_out text="Try seeking counselling for the family."></message_out>
+				<message_out text="You should move out. Physical violence is never acceptable."></message_out>
 			</message_in>
 		</scene>
-		<scene requires_messages="1:5" information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
+		<scene parent_messages="1:3" information="Domestic violence commonly results in self-harm and attempted suicide.">
 			<message_in text="My parents missed one of my major cello recitals, and I was really hurt. Things are not looking up...">
-				<message_out text="Try giving them some distance. They'll come around.">
-					<message_in text="Okay, I'll keep trying. Thanks for the advice."></message_in>
-				</message_out>
-				<message_out text="Give it some more time.">
-					<message_in text="I'm not sure how much longer this can go on, but I'll try and hold on a little longer..."></message_in>
-				</message_out>
+				<message_out text="Try giving them some distance. They'll come around."></message_out>
+				<message_out text="Give it some more time."></message_out>
 			</message_in>
 		</scene>
+
+		<scene parent_messages="2:2" information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
+			<message_in text="I scheduled a meeting with the school counsellor with my family. But I'm really nervous – do you think that it will go okay?">
+				<message_out text="The meeting is a good idea. Just be honest."></message_out>
+				<message_out text="I think that some distance might be a good idea for a little while."></message_out>
+			</message_in>
+		</scene>
+		<scene parent_messages="2:3, 3:2" information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
+			<message_in text="I eventually moved in with a friend - just for a short while. I'm not sure if this will help though... What do you think?">
+				<message_out text="You belong with your family. You should go back."></message_out>
+				<message_out text="This is a good choice. You should keep an eye out as things develop."></message_out>
+			</message_in>
+		</scene>
+		<scene parent_messages="3:3" information="Domestic violence accounts for between 16% and one quarter of all recorded violent crime.">
+			<message_in text="I did really badly in a test today. I just couldn't concentrate, and I haven't been able to study properly at home...">
+				<message_out text="It's time to get out of there..."></message_out>
+				<message_out text="It seems bad now, but they still love you..."></message_out>
+			</message_in>
+		</scene>
+		
+		<scene parent_messages="4:2" information="The link between child physical abuse and domestic violence is high, with estimates ranging between 30% to 66%.">
+			<message_in text="The meeting went quite well. Things are a little awkward though. Do you think it will get better?">
+				<message_out text="Yes. Hang in there!"></message_out>
+				<message_out text="It will, but it will be a hard process."></message_out>
+			</message_in>
+		</scene>
+		<scene parent_messages="4:3, 5:2" information="The link between child physical abuse and domestic violence is high, with estimates ranging between 30% to 66%.">
+			<message_in text="So I'm living with a friend, and my mum calls me saying that she wants me to come back. She said that she will not hit me again, and that they accept who I am. Should I give them another chance?">
+				<message_out text="I think that you should move back in. They are your family, after all."></message_out>
+				<message_out text="Try visiting them to be sure that they're ready now."></message_out>
+			</message_in>
+		</scene>
+		<scene parent_messages="5:3, 6:2" information="The link between child physical abuse and domestic violence is high, with estimates ranging between 30% to 66%.">
+			<message_in text="I've been living with my friend for a month now. But I haven't heard from my family. Should I contact them? Will they be ready now?">
+				<message_out text="Yes. Absence makes the heart grow fonder."></message_out>
+				<message_out text="They will never really accept you..."></message_out>
+			</message_in>
+		</scene>
+		<scene parent_messages="6:3" information="The link between child physical abuse and domestic violence is high, with estimates ranging between 30% to 66%.">
+			<message_in text="Things are not going well. My sister is okay with me, but my parents...">
+				<message_out text="You should move out. This is surely not the life you want..."></message_out>
+				<message_out text="Hang in there! Having just your sister will make all the difference."></message_out>
+			</message_in>
+		</scene>
+
+		<scene parent_messages="7:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
+			<message_in text="Things are much better now. I graduated from school, and am in my first year of university now. I talk to my parents regularly, and I think that they have come around. Thanks for all of the great advice!"></message_in>
+		</scene>
+		<scene parent_messages="7:3, 8:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
+			<message_in text="Things are better now. I'm living at home, and we are slowly getting back to normal. I know it will take a long time though..."></message_in>
+		</scene>
+		<scene parent_messages="8:3, 9:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
+			<message_in text="Things didn't work out with my parents. I got a part-time job and moved into my own place. I just met someone, and so I am feeling quite excited for the first time in a long time. Thanks!"></message_in>
+		</scene>
+		<scene parent_messages="9:3, 10:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
+			<message_in text="It's been a while now. I got a great job and moved into my own place. I got new friends, and I'm in a stable relationship. It's still weird with my family, but I feel better now that I have my own life. Thanks for all of your advice."></message_in>
+		</scene>
+		<scene parent_messages="10:3" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
+			<message_in text="My parents threw me out after seeing me with a female friend. They got the wrong idea, and over-reacted. I'm living with a friend now and looking for part-time work. I'm hoping that things will start to look up soon..."></message_in>
+		</scene>
+
 	</character>
 </iadvise>

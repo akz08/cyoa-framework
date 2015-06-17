@@ -54,7 +54,7 @@ end
 # +scene_xml+:: Nokogiri element node containing scene information
 # +character_id+:: id of containing character record
 def self.create_scene_dependencies(scene_id, scene_xml, character_id)
-	dependencies = scene_xml.xpath("@requires_messages").to_s.delete(" ").split(",")
+	dependencies = scene_xml.xpath("@parent_messages").to_s.delete(" ").split(",")
 	if !dependencies.empty? then
 		for dependency in dependencies do
 			# Get id of message record upon which scene is dependent

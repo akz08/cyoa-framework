@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration
 			t.integer :fb_user_id, :limit => 8, null: false
 			t.string :first_name, null: true
 			t.string :last_name, null: true
-			t.text :encrypted_email, null: true
+			t.string :encrypted_email, null: true
 			t.timestamps
 		end
 		add_index :users, ['fb_user_id'], unique: true

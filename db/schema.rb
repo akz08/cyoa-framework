@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20150426120012) do
     t.integer  "fb_user_id",      limit: 8, null: false
     t.string   "first_name"
     t.string   "last_name"
-    t.text     "encrypted_email"
+    t.string   "encrypted_email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

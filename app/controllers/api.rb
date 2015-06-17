@@ -64,7 +64,6 @@ module CYOA
 				requires :fb_access_token, type: String, desc: "Valid Facebook access token."
 			end
 
-			# requires an app token parameter to access
 			desc "Return information of all characters available to user"
 			get do
 				error! "401 Access denied.", 401 unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
