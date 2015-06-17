@@ -103,3 +103,5 @@ def self.create_message(message_xml, scene_id, parent_id)
 end
 
 main
+
+User.create(fb_user_id: 00000000, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")

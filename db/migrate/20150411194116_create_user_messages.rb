@@ -1,10 +1,10 @@
 class CreateUserMessages < ActiveRecord::Migration
 	def change
 		create_table :user_messages, id: false do |t|
-			t.references :user, null: false
-			t.references :message, null: false
-			t.datetime :datetime, null: false
+			t.integer :fb_user_id, null: false
+			t.integer :message_id, null: false
+			t.timestamps
 		end
-		add_index :user_messages, [:user_id, :message_id], unique: true
+		add_index :user_messages, [:fb_user_id, :message_id], unique: true
 	end
 end

@@ -7,5 +7,5 @@ class Message < ActiveRecord::Base
 
 	validates :scene_id, presence: true
 	validates :text, presence: true
-	validates :is_incoming, exclusion: { in: [nil] }
+	validates :is_incoming, inclusion: { in: [true, false] }
 end

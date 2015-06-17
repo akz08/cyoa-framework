@@ -13,17 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20150426120012) do
 
-  create_table "api_keys", force: :cascade do |t|
-    t.string   "access_token",                          null: false
-    t.integer  "uid",          limit: 8,                null: false
-    t.boolean  "active",                 default: true, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true
-  add_index "api_keys", ["uid"], name: "index_api_keys_on_uid"
-
   create_table "characters", force: :cascade do |t|
     t.string  "name",        null: false
     t.integer "age",         null: false
@@ -57,23 +46,25 @@ ActiveRecord::Schema.define(version: 20150426120012) do
   add_index "scenes", ["character_id"], name: "index_scenes_on_character_id"
 
   create_table "user_characters", id: false, force: :cascade do |t|
-    t.integer "user_id",      null: false
-    t.integer "character_id", null: false
+    t.integer  "fb_user_id",   null: false
+    t.integer  "character_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "user_characters", ["user_id", "character_id"], name: "index_user_characters_on_user_id_and_character_id", unique: true
+  add_index "user_characters", ["fb_user_id", "character_id"], name: "index_user_characters_on_fb_user_id_and_character_id", unique: true
 
   create_table "user_messages", id: false, force: :cascade do |t|
-    t.integer  "user_id",    null: false
+    t.integer  "fb_user_id", null: false
     t.integer  "message_id", null: false
-    t.datetime "datetime",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "user_messages", ["user_id", "message_id"], name: "index_user_messages_on_user_id_and_message_id", unique: true
+  add_index "user_messages", ["fb_user_id", "message_id"], name: "index_user_messages_on_fb_user_id_and_message_id", unique: true
 
   create_table "users", id: false, force: :cascade do |t|
-    t.integer  "uid",                limit: 8, null: false
-    t.text     "encrypted_fb_token"
+    t.integer  "fb_user_id",      limit: 8, null: false
     t.string   "first_name"
     t.string   "last_name"
     t.text     "encrypted_email"
@@ -81,6 +72,6 @@ ActiveRecord::Schema.define(version: 20150426120012) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["uid"], name: "index_users_on_uid", unique: true
+  add_index "users", ["fb_user_id"], name: "index_users_on_fb_user_id", unique: true
 
 end

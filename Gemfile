@@ -15,6 +15,7 @@ gem 'sqlite3'
 gem 'omniauth-facebook'
 gem 'attr_encrypted'
 gem 'dotenv'
+gem 'httparty'
 
 group :development do
 	gem 'shotgun'
