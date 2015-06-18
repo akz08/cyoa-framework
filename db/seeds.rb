@@ -104,4 +104,8 @@ end
 
 main
 
-User.create(fb_user_id: 00000000, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
+User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
+UserMessage.create(fb_user_id: 0, message_id: 1)
+UserMessage.create(fb_user_id: 0, message_id: 2)
+UserMessage.create(fb_user_id: 0, message_id: 4)
+UserMessage.create(fb_user_id: 0, message_id: 6)
