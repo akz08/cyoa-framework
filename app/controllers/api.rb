@@ -44,7 +44,7 @@ module CYOA
 
 			desc "Authenticate a user by using a Facebook access token"
 			post do
-				error! "Access denied.", 401 unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
+				error!("Access denied.", 401) unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
 				begin
 					User.find_by!(fb_user_id: params['fb_user_id'])
 					status 200
@@ -55,7 +55,7 @@ module CYOA
 						:last_name => params['last_name'],
 						:email => params['email']
 					)
-					error! "Could not create user.", 400 unless user.valid?
+					error!("Could not create user.", 400) unless user.valid?
 					user.save
 					status 201
 				end
@@ -72,7 +72,7 @@ module CYOA
 
 			desc "Return information of all characters available to the user"
 			get do
-				error! "Access denied.", 401 unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
+				error!("Access denied.", 401) unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
 				status 200
 				Character.joins("LEFT OUTER JOIN user_characters ON characters.id = user_characters.character_id").where("user_characters.fb_user_id = ?", params['fb_user_id']).as_json
 			end
@@ -83,19 +83,19 @@ module CYOA
 			end
 			route_param :character_id do
 				get do
-					error! "Access denied.", 401 unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
+					error!("Access denied.", 401) unless is_authorised?(params['fb_user_id'], params['fb_access_token'])
 					begin
-						TODO
+						Character.find_by!(id: params['character_id'])
 					rescue ActiveRecord::RecordNotFound
-						error! "Character is not available to user.", 403
+						error!("Character does not exist.", 400)
 					end
 					begin
-						character = Character.find_by!(character_id: params['character_id'])
-						status 200
-						return character
+						UserCharacter.where(fb_user_id: params['fb_user_id']).find_by!(character_id: params['character_id'])
 					rescue ActiveRecord::RecordNotFound
-						error! "Character does not exist.", 400
+						error!("Character is not available to user.", 403)
 					end
+					status 200
+					Character.find_by!(id: params['character_id'])
 				end
 			end
 
