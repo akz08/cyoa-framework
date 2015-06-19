@@ -21,50 +21,52 @@ ActiveRecord::Schema.define(version: 20150426120012) do
     t.boolean "is_add_on",   null: false
   end
 
+  create_table "characters_users", id: false, force: :cascade do |t|
+    t.integer  "character_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "characters_users", ["character_id"], name: "index_characters_users_on_character_id"
+  add_index "characters_users", ["user_id"], name: "index_characters_users_on_user_id"
+
   create_table "messages", force: :cascade do |t|
-    t.integer "scene_id",    null: false
+    t.integer "scene_id"
     t.text    "text",        null: false
     t.boolean "is_incoming", null: false
-    t.integer "delay"
     t.integer "parent_id"
   end
 
   add_index "messages", ["scene_id"], name: "index_messages_on_scene_id"
 
-  create_table "scene_dependencies", id: false, force: :cascade do |t|
-    t.integer "scene_id",   null: false
-    t.integer "message_id", null: false
+  create_table "messages_scenes", id: false, force: :cascade do |t|
+    t.integer "message_id"
+    t.integer "scene_id"
   end
 
-  add_index "scene_dependencies", ["scene_id", "message_id"], name: "index_scene_dependencies_on_scene_id_and_message_id", unique: true
+  add_index "messages_scenes", ["message_id"], name: "index_messages_scenes_on_message_id"
+  add_index "messages_scenes", ["scene_id"], name: "index_messages_scenes_on_scene_id"
+
+  create_table "messages_users", id: false, force: :cascade do |t|
+    t.integer  "message_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages_users", ["message_id"], name: "index_messages_users_on_message_id"
+  add_index "messages_users", ["user_id"], name: "index_messages_users_on_user_id"
 
   create_table "scenes", force: :cascade do |t|
-    t.integer "character_id", null: false
+    t.integer "character_id"
     t.text    "information",  null: false
   end
 
   add_index "scenes", ["character_id"], name: "index_scenes_on_character_id"
 
-  create_table "user_characters", id: false, force: :cascade do |t|
-    t.integer  "fb_user_id",   null: false
-    t.integer  "character_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_characters", ["fb_user_id", "character_id"], name: "index_user_characters_on_fb_user_id_and_character_id", unique: true
-
-  create_table "user_messages", id: false, force: :cascade do |t|
-    t.integer  "fb_user_id", null: false
-    t.integer  "message_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_messages", ["fb_user_id", "message_id"], name: "index_user_messages_on_fb_user_id_and_message_id", unique: true
-
   create_table "users", id: false, force: :cascade do |t|
-    t.integer  "fb_user_id",      limit: 8, null: false
+    t.integer  "fb_user_id",      limit: 8
     t.string   "first_name"
     t.string   "last_name"
     t.string   "encrypted_email"

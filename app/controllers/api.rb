@@ -84,14 +84,14 @@ module CYOA
 				requires :fb_access_token, type: String, desc: "Valid Facebook access token."
 			end
 
-			desc "Return information of all characters available to the user"
+			desc "Return static information on all characters available to the user"
 			get do
 				error!("Access denied.", 401) unless authorised?(params['fb_user_id'], params['fb_access_token'])
 				status 200
 				Character.joins("LEFT OUTER JOIN user_characters ON characters.id = user_characters.character_id").where("user_characters.fb_user_id = ?", params['fb_user_id']).as_json
 			end
 
-			desc "Return information for a single character available to the user"
+			desc "Return static information on a single character available to the user"
 			params do
 				requires :character_id, type: Integer, desc: "Unique character id."
 			end
@@ -105,7 +105,7 @@ module CYOA
 				end
 			end
 
-			desc "Return saved progress for a single character available to the user"
+			desc "Return exchanged messages for a single character available to the user"
 			params do
 				requires :character_id, type: Integer, desc: "Unique character id."
 			end
@@ -116,6 +116,54 @@ module CYOA
 					error!("Character is not available to user.", 403) unless character_unlocked?(params['character_id'])
 					status 200
 					Message.joins("LEFT OUTER JOIN user_messages ON messages.id = user_messages.message_id").where("user_messages.fb_user_id = ?", params['fb_user_id']).as_json
+				end
+			end
+		end
+
+		resource :scenes do
+			helpers do
+				def scene_exists?(scene_id)
+					begin
+						Scene.find_by!(id: params['scene_id'])
+						true
+					rescue ActiveRecord::RecordNotFound
+						false
+					end
+				end
+
+				def scene_unlocked?(scene_id)
+					begin
+						#UserMessage.joins("INNER JOIN messages ON user_messages.message_id = messages.id").joins("INNER JOINS scenes ON messages.scene_id = scenes.id").where(user_messages.fb_user_id: params['fb_user_id']).find_by!(messages.scene_id: params['scene_id'])
+						true
+					rescue ActiveRecord::RecordNotFound
+						false
+					end
+				end
+			end
+
+			params do
+				requires :fb_user_id, type: Integer, desc: "User's unique Facebook user id."
+				requires :fb_access_token, type: String, desc: "Valid Facebook access token."
+			end
+
+			#desc "Return static information of all scenes available to the user"
+			#get do
+			#	error!("Access denied.", 401) unless authorised?(params['fb_user_id'], params['fb_access_token'])
+			#	status 200
+			#	Scene.joins("RIGHT OUTER JOIN messages ON scenes.id = messages.scene_id").joins().where("user_characters.fb_user_id = ?", params['fb_user_id']).as_json
+			#end
+
+			desc "Return static information on a single scene available to the user"
+			params do
+				requires :scene_id, type: Integer, desc: "Unique scene id."
+			end
+			route_param :scene_id do
+				get do
+					error!("Access denied.", 401) unless authorised?(params['fb_user_id'], params['fb_access_token'])
+					error!("Scene does not exist.", 400) unless scene_exists?(params['scene_id'])
+					error!("Scene is not available to user.", 403) unless scene_unlocked?(params['scene_id'])
+					#status 200
+					#Scene.find_by!(id: params['scene_id'])
 				end
 			end
 		end

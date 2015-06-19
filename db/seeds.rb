@@ -13,99 +13,84 @@ def self.main
 		character = create_character(node)
 		scene_node_set = node.xpath("scene")
 		for node in scene_node_set do
-			scene = create_scene(node, character.id)
-			create_scene_dependencies(scene.id, node, character.id)
-			create_messages_in_scene(node.first_element_child, scene.id, nil)
+			scene = create_scene(character.id, node)
+			create_messages_in_scene(scene.id, node.first_element_child, nil)
+			create_scene_dependencies(scene, node)
 		end
 	end
 end
 
 # Create a single character record from its XML
 # Params:
-# +character_xml+:: Nokogiri element node containing character information
-def self.create_character(character_xml)
-	# Get information from XML node
-	name = character_xml.xpath("@name")
-	age = character_xml.xpath("@age").to_s.to_i
-	gender = character_xml.xpath("@gender")
-	description = character_xml.xpath("@description")
-	is_add_on = character_xml.xpath("@is_add_on")
+# +xml+:: Nokogiri element node containing character information
+def self.create_character(xml)
+	name = xml.xpath("@name").to_s
+	age = xml.xpath("@age").to_s.to_i
+	gender = xml.xpath("@gender").to_s
+	description = xml.xpath("@description").to_s
+	is_add_on = xml.xpath("@is_add_on")
 	if !is_add_on.empty? then (is_add_on = !is_add_on.to_s.to_i.zero?) else (is_add_on = false) end
-	# Create and return character record
-	character = Character.create(name: name, age: age, gender: gender, description: description, is_add_on: is_add_on)
-	return character
+	Character.create(name: name, age: age, gender: gender, description: description, is_add_on: is_add_on)
 end
 
 # Create a single scene record from its XML
 # Params:
-# +scene_xml+:: Nokogiri element node containing scene information
 # +character_id+:: id of containing character record
-def self.create_scene(scene_xml, character_id)
-	# Get information from XML node
-	information = scene_xml.xpath("@information")
-	# Create and return scene record
-	scene = Scene.create(character_id: character_id, information: information)
-	return scene
-end
-
-# Create records for the message dependencies on a scene
-# Params:
-# +scene_id+:: id of scene record
-# +scene_xml+:: Nokogiri element node containing scene information
-# +character_id+:: id of containing character record
-def self.create_scene_dependencies(scene_id, scene_xml, character_id)
-	dependencies = scene_xml.xpath("@parent_messages").to_s.delete(" ").split(",")
-	if !dependencies.empty? then
-		for dependency in dependencies do
-			# Get id of message record upon which scene is dependent
-			dep_xml_scene_id = dependency.split(":")[0].to_i
-			dep_xml_message_id = dependency.split(":")[1].to_i
-			dep_scene_id = Scene.where("character_id = ?", character_id)[dep_xml_scene_id - 1]["id"]
-			dep_message_id = Message.where("scene_id = ?", dep_scene_id)[dep_xml_message_id - 1]["id"]
-			# Create specified dependency record
-			SceneDependency.create(scene_id: scene_id, message_id: dep_message_id)
-		end
-	end
+# +xml+:: Nokogiri element node containing scene information
+def self.create_scene(character_id, xml)
+	information = xml.xpath("@information").to_s
+	Scene.create(character_id: character_id, information: information)
 end
 
 # Use pre-order depth-first search to sequentially create message records from a scene
 # Params:
-# +message_xml+:: Nokogiri element node containing message information
 # +scene_id+:: id of containing scene record
+# +xml+:: Nokogiri element node containing scene message tree's root message information
 # +parent_id+:: id of parent message record
-def self.create_messages_in_scene(message_xml, scene_id, parent_id)
+def self.create_messages_in_scene(scene_id, xml, parent_id)
 	# Create record for current message
-	message = create_message(message_xml, scene_id, parent_id)
+	message = create_message(scene_id, xml, parent_id)
 	# Recurse on all children, if any
-	children = message_xml.children
+	children = xml.children
 	if !children.empty? then
 		parent_id = message.id
-		for child in children do
-			create_messages_in_scene(child, scene_id, parent_id)
+		for child_xml in children do
+			create_messages_in_scene(scene_id, child_xml, parent_id)
 		end
 	end
 end
 
 # Create a single message record from its XML
 # Params:
-# +message_xml+:: Nokogiri element node containing message information
 # +scene_id+:: id of containing scene record
+# +xml+:: Nokogiri element node containing message information
 # +parent_id+:: id of parent message
-def self.create_message(message_xml, scene_id, parent_id)
-	# Get information from XML node
-	text = message_xml.xpath("@text")
-	is_incoming = message_xml.name == "message_in"
-	delay = message_xml.xpath("@delay")
-	if !delay.empty? then (delay = delay.to_s.to_i) else (delay = nil) end
-	# Create and return message record
-	message = Message.create(scene_id: scene_id, text: text, is_incoming: is_incoming, delay: delay, parent_id: parent_id)
-	return message
+def self.create_message(scene_id, xml, parent_id)
+	text = xml.xpath("@text").to_s
+	is_incoming = xml.name.to_s == "message_in"
+	Message.create(scene_id: scene_id, text: text, is_incoming: is_incoming, parent_id: parent_id)
+end
+
+# Create records for the dependencies that a scene has on messages
+# Params:
+# +scene+:: Scene object to establish dependencies for
+# +xml+:: Nokogiri element node containing scene information
+def self.create_scene_dependencies(scene, xml)
+	dependencies = xml.xpath("@parent_messages").to_s.delete(" ").split(",").each do |dependency|
+		# Get id of message record upon which scene is dependent
+		depends_on_scene_xml_id = dependency.split(":")[0].to_i
+		depends_on_scene = Scene.where("character_id = ?", scene.character_id)[depends_on_scene_xml_id - 1]
+		depends_on_message_xml_id = dependency.split(":")[1].to_i
+		depends_on_message = Message.where("scene_id = ?", depends_on_scene.id)[depends_on_message_xml_id - 1]
+		# Create specified dependency record
+		scene.messages << depends_on_message
+	end
 end
 
 main
 
-User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
-UserMessage.create(fb_user_id: 0, message_id: 1)
-UserMessage.create(fb_user_id: 0, message_id: 2)
-UserMessage.create(fb_user_id: 0, message_id: 4)
-UserMessage.create(fb_user_id: 0, message_id: 6)
+user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
+user.messages << Message.find(1)
+user.messages << Message.find(2)
+user.messages << Message.find(4)
+user.messages << Message.find(6)

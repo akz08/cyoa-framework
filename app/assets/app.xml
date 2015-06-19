@@ -3,7 +3,7 @@
 	<character name="Amy" age="17" gender="Female" description="Is being verbally abused by her family because of her sexual orientation.">
 		
 		<scene information="Around one in ten women (12%) have been victims of non-sexual family abuse.">
-			<message_in text="Hi, I'm Amy and I am 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it is making me very upset. What can I do?">
+			<message_in text="Hi, I'm Amy and I'm 17 years old. I just came out to my parents, and am now suffering through bouts of verbal abuse, and being ignored by them. They hate me, and it's making me very upset. What can I do?">
 				<message_out text="Keep trying to initiate conversation. They cannot ignore you forever."></message_out>
 				<message_out text="Give it some time. This is new to them, and they just need some time to get used to it."></message_out>
 			</message_in>
@@ -60,20 +60,20 @@
 			</message_in>
 		</scene>
 		<scene parent_messages="6:3" information="The link between child physical abuse and domestic violence is high, with estimates ranging between 30% to 66%.">
-			<message_in text="Things are not going well. My sister is okay with me, but my parents...">
+			<message_in text="Things are not going well. My sister's okay with me, but my parents...">
 				<message_out text="You should move out. This is surely not the life you want..."></message_out>
 				<message_out text="Hang in there! Having just your sister will make all the difference."></message_out>
 			</message_in>
 		</scene>
 
 		<scene parent_messages="7:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
-			<message_in text="Things are much better now. I graduated from school, and am in my first year of university now. I talk to my parents regularly, and I think that they have come around. Thanks for all of the great advice!"></message_in>
+			<message_in text="Things are much better now. I graduated from school, and am in my first year of university. I talk to my parents regularly, and I think that they have come around. Thanks for all of the great advice!"></message_in>
 		</scene>
 		<scene parent_messages="7:3, 8:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
-			<message_in text="Things are better now. I'm living at home, and we are slowly getting back to normal. I know it will take a long time though..."></message_in>
+			<message_in text="Things are better now. I'm living at home, and we're slowly getting back to normal. I know it will take a long time though..."></message_in>
 		</scene>
 		<scene parent_messages="8:3, 9:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
-			<message_in text="Things didn't work out with my parents. I got a part-time job and moved into my own place. I just met someone, and so I am feeling quite excited for the first time in a long time. Thanks!"></message_in>
+			<message_in text="Things didn't work out with my parents. I got a part-time job and moved into my own place. I just met someone, so I'm feeling quite excited for the first time in a long time. Thanks!"></message_in>
 		</scene>
 		<scene parent_messages="9:3, 10:2" information="Women are more likely than men to have experienced all types of intimate violence since the ages of 16.">
 			<message_in text="It's been a while now. I got a great job and moved into my own place. I got new friends, and I'm in a stable relationship. It's still weird with my family, but I feel better now that I have my own life. Thanks for all of your advice."></message_in>
