@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150426120012) do
+ActiveRecord::Schema.define(version: 20150623214657) do
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string   "key"
+    t.integer  "fb_user_id"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "api_keys", ["fb_user_id"], name: "index_api_keys_on_fb_user_id"
+  add_index "api_keys", ["key"], name: "index_api_keys_on_key"
 
   create_table "characters", force: :cascade do |t|
     t.string  "name",        null: false
@@ -23,13 +34,13 @@ ActiveRecord::Schema.define(version: 20150426120012) do
 
   create_table "characters_users", id: false, force: :cascade do |t|
     t.integer  "character_id"
-    t.integer  "user_id"
+    t.integer  "fb_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "characters_users", ["character_id"], name: "index_characters_users_on_character_id"
-  add_index "characters_users", ["user_id"], name: "index_characters_users_on_user_id"
+  add_index "characters_users", ["fb_user_id"], name: "index_characters_users_on_fb_user_id"
 
   create_table "messages", force: :cascade do |t|
     t.integer "scene_id"
@@ -50,13 +61,13 @@ ActiveRecord::Schema.define(version: 20150426120012) do
 
   create_table "messages_users", id: false, force: :cascade do |t|
     t.integer  "message_id"
-    t.integer  "user_id"
+    t.integer  "fb_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "messages_users", ["fb_user_id"], name: "index_messages_users_on_fb_user_id"
   add_index "messages_users", ["message_id"], name: "index_messages_users_on_message_id"
-  add_index "messages_users", ["user_id"], name: "index_messages_users_on_user_id"
 
   create_table "scenes", force: :cascade do |t|
     t.integer "character_id"
@@ -65,15 +76,12 @@ ActiveRecord::Schema.define(version: 20150426120012) do
 
   add_index "scenes", ["character_id"], name: "index_scenes_on_character_id"
 
-  create_table "users", id: false, force: :cascade do |t|
-    t.integer  "fb_user_id",      limit: 8
+  create_table "users", primary_key: "fb_user_id", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "encrypted_email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "users", ["fb_user_id"], name: "index_users_on_fb_user_id", unique: true
 
 end

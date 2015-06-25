@@ -1,5 +1,11 @@
 require 'nokogiri'
 
+require_relative '../app/models/api_key'
+require_relative '../app/models/character'
+require_relative '../app/models/message'
+require_relative '../app/models/scene'
+require_relative '../app/models/user'
+
 def self.main
 	# Set relative path to XML document containing application seed data
 	xmlDocPath = File.expand_path("../../app/assets/app.xml", __FILE__)
@@ -90,6 +96,7 @@ end
 main
 
 user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
+user.api_keys << ApiKey.create(fb_user_id: 0)
 user.messages << Message.find(1)
 user.messages << Message.find(2)
 user.messages << Message.find(4)
