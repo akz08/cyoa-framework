@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623214657) do
+ActiveRecord::Schema.define(version: 20150625122305) do
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "key"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20150623214657) do
     t.datetime "updated_at"
   end
 
+  add_index "characters_users", ["character_id", "fb_user_id"], name: "index_characters_users_on_character_id_and_fb_user_id", unique: true
   add_index "characters_users", ["character_id"], name: "index_characters_users_on_character_id"
   add_index "characters_users", ["fb_user_id"], name: "index_characters_users_on_fb_user_id"
 
@@ -56,6 +57,7 @@ ActiveRecord::Schema.define(version: 20150623214657) do
     t.integer "scene_id"
   end
 
+  add_index "messages_scenes", ["message_id", "scene_id"], name: "index_messages_scenes_on_message_id_and_scene_id", unique: true
   add_index "messages_scenes", ["message_id"], name: "index_messages_scenes_on_message_id"
   add_index "messages_scenes", ["scene_id"], name: "index_messages_scenes_on_scene_id"
 
@@ -67,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150623214657) do
   end
 
   add_index "messages_users", ["fb_user_id"], name: "index_messages_users_on_fb_user_id"
+  add_index "messages_users", ["message_id", "fb_user_id"], name: "index_messages_users_on_message_id_and_fb_user_id", unique: true
   add_index "messages_users", ["message_id"], name: "index_messages_users_on_message_id"
 
   create_table "scenes", force: :cascade do |t|
@@ -75,6 +78,17 @@ ActiveRecord::Schema.define(version: 20150623214657) do
   end
 
   add_index "scenes", ["character_id"], name: "index_scenes_on_character_id"
+
+  create_table "scenes_users", id: false, force: :cascade do |t|
+    t.integer  "scene_id"
+    t.integer  "fb_user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "scenes_users", ["fb_user_id"], name: "index_scenes_users_on_fb_user_id"
+  add_index "scenes_users", ["scene_id", "fb_user_id"], name: "index_scenes_users_on_scene_id_and_fb_user_id", unique: true
+  add_index "scenes_users", ["scene_id"], name: "index_scenes_users_on_scene_id"
 
   create_table "users", primary_key: "fb_user_id", force: :cascade do |t|
     t.string   "first_name"

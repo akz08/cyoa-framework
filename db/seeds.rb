@@ -89,7 +89,7 @@ def self.create_scene_dependencies(scene, xml)
 		depends_on_message_xml_id = dependency.split(":")[1].to_i
 		depends_on_message = Message.where("scene_id = ?", depends_on_scene.id)[depends_on_message_xml_id - 1]
 		# Create specified dependency record
-		scene.messages << depends_on_message
+		scene.dependencies << depends_on_message
 	end
 end
 
@@ -97,6 +97,8 @@ main
 
 user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
 user.api_keys << ApiKey.create(fb_user_id: 0)
+user.scenes << Scene.find(1)
+user.scenes << Scene.find(2)
 user.messages << Message.find(1)
 user.messages << Message.find(2)
 user.messages << Message.find(4)

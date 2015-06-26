@@ -5,5 +5,6 @@ class CreateCharactersAndUsers < ActiveRecord::Migration
 			t.integer :fb_user_id, index: true
 			t.timestamps
 		end
+		add_index :characters_users, [ :character_id, :fb_user_id ], unique: true
 	end
 end

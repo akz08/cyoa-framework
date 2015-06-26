@@ -5,5 +5,6 @@ class CreateMessagesAndUsers < ActiveRecord::Migration
 			t.integer :fb_user_id, index: true
 			t.timestamps
 		end
+		add_index :messages_users, [ :message_id, :fb_user_id ], unique: true
 	end
 end

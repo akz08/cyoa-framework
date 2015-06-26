@@ -1,6 +1,6 @@
 class Character < ActiveRecord::Base
-	has_many :scenes, dependent: :destroy	# Associate each character with the scenes that it has.
-	has_and_belongs_to_many :users			# Associate each character with the users that have unlocked them.
+	has_many :scenes, dependent: :destroy									# Associate each character with the scenes that it has.
+	has_and_belongs_to_many :users, association_foreign_key: 'fb_user_id'	# Associate each character with the users that have unlocked them.
 
 	validates :name, presence: true
 	validates :age, presence: true
