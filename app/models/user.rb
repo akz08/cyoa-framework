@@ -1,6 +1,8 @@
 require 'attr_encrypted'
 
 require_relative './character'
+require_relative './message'
+require_relative './scene'
 
 class User < ActiveRecord::Base
 	self.primary_key = :fb_user_id
@@ -14,13 +16,17 @@ class User < ActiveRecord::Base
 
 	attr_encrypted :email, key: ENV['ENCRYPT_KEY']
 
-	after_create :unlock_default_characters
+	after_create :create_associations
 
 	private
 
-	def unlock_default_characters
-		Character.where(is_add_on: false).each do |c|
-			self.characters << c
+	def create_associations
+		Character.where(is_add_on: false).each do |character|
+			self.characters << character
+			scene = character.scenes.first
+			self.scenes << scene
+			message = scene.messages.first
+			self.messages << message
 		end
 	end
 end

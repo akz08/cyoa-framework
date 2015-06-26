@@ -5,7 +5,7 @@ require 'rubygems'
 require 'grape'
 
 require_relative './characters'
-#require_relative './messages'
+require_relative './messages'
 require_relative './scenes'
 require_relative './users'
 
@@ -15,6 +15,6 @@ class API < Grape::API
 
 	mount Characters
 	mount Scenes
-	#mount Messages
+	mount Messages
 	mount Users
 end
