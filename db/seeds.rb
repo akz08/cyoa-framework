@@ -4,8 +4,6 @@ require_relative '../app/models/character'
 require_relative '../app/models/message'
 require_relative '../app/models/scene'
 
-require_relative '../app/models/user'	# REMOVE
-
 def self.main
 	# Set relative path to XML document containing application seed data
 	xmlDocPath = File.expand_path("../../app/assets/app.xml", __FILE__)
@@ -95,12 +93,14 @@ end
 
 main
 
-# REMOVE ALL BELOW
+if ENV['RACK_ENV'] == 'development'
+	require_relative '../app/models/user'
 
-user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
-user.scenes << Scene.find(2)
-user.messages << Message.find(2)
-user.messages << Message.find(4)
-user.messages << Message.find(6)
+	user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
+	user.scenes << Scene.find(2)
+	user.messages << Message.find(2)
+	user.messages << Message.find(4)
+	user.messages << Message.find(6)
 
-User.create(fb_user_id: 1, first_name: "David", last_name: "Pliskin", email: "david.pliskin@philanthropy.com")
+	User.create(fb_user_id: 1, first_name: "David", last_name: "Pliskin", email: "david.pliskin@philanthropy.com")
+end
