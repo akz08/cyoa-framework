@@ -14,7 +14,7 @@ class API < Grape::API
 	format :json
 
 	mount Characters
-	mount Scenes
 	mount Messages
+	mount Scenes
 	mount Users
 end
