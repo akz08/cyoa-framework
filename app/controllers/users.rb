@@ -25,7 +25,9 @@ class Users < Grape::API
 			post do
 				error!("Access denied.", 401) unless fb_authenticated?(params['fb_user_id'], params['fb_access_token'])
 				begin
-					User.find(params[:fb_user_id])
+					user = User.find(params[:fb_user_id])
+					status 200
+					user
 				rescue ActiveRecord::RecordNotFound
 					user = User.create(
 						fb_user_id: params[:fb_user_id],
@@ -33,15 +35,10 @@ class Users < Grape::API
 						last_name: params[:last_name],
 						email: params[:email]
 					)
-					if user.valid?
-						key = ApiKey.create(fb_user_id: params[:fb_user_id]).key
-						status 201
-						return { key: key }
-					else
-						error!("400 Could not create user.", 400)
-					end
+					error!("400 Could not create user.", 400) unless user.valid?
+					status 201
+					{ key: key }
 				end
-				status 200
 			end
 		end
 	end

@@ -34,13 +34,33 @@ class Messages < Grape::API
 		end
 		after_validation do
 			error!("Message does not exist.", 404) unless message_exists?(params[:message_id])
-			error!("Message is not available to user.", 403) unless message_exchanged?(params[:fb_user_id], params[:message_id])
 		end
 		route_param :message_id do
 			desc "Return static information on a single message available to the user"
 			get do
+				error!("Message is not available to user.", 403) unless message_exchanged?(params[:fb_user_id], params[:message_id])
 				status 200
 				User.find(params[:fb_user_id]).messages.find(params[:message_id])
+			end
+
+			desc "Process the message sent by the user in response to a character message"
+			post do
+				error!("Message cannot be posted by user.", 403) unless post_message_valid?(params[:fb_user_id], params[:message_id])
+				user = User.find(params[:fb_user_id])
+				message = Message.find(params[:message_id])
+				user.messages << message
+				character_response = message.children.first
+				if !character_response.nil?
+					user.messages << character_response
+					choices = character_response.children
+					trigger_next_scene(character_response.id) if choices.empty?
+					status 201
+					{ character_response: character_response, choices: choices }
+				else
+					trigger_next_scene(params[:message_id])
+					status 201
+					{ character_response: nil, choices: nil }
+				end
 			end
 		end
 	end

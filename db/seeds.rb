@@ -4,8 +4,7 @@ require_relative '../app/models/character'
 require_relative '../app/models/message'
 require_relative '../app/models/scene'
 
-require_relative '../app/models/api_key'	# REMOVE
-require_relative '../app/models/user'		# REMOVE
+require_relative '../app/models/user'	# REMOVE
 
 def self.main
 	# Set relative path to XML document containing application seed data
@@ -35,9 +34,9 @@ def self.create_character(xml)
 	age = xml.xpath("@age").to_s.to_i
 	gender = xml.xpath("@gender").to_s
 	description = xml.xpath("@description").to_s
-	is_add_on = xml.xpath("@is_add_on")
-	if !is_add_on.empty? then (is_add_on = !is_add_on.to_s.to_i.zero?) else (is_add_on = false) end
-	Character.create(name: name, age: age, gender: gender, description: description, is_add_on: is_add_on)
+	add_on = xml.xpath("@add_on")
+	if !add_on.empty? then (add_on = !add_on.to_s.to_i.zero?) else (add_on = false) end
+	Character.create(name: name, age: age, gender: gender, description: description, add_on: add_on)
 end
 
 # Create a single scene record from its XML
@@ -74,8 +73,8 @@ end
 # +parent_id+:: id of parent message
 def self.create_message(scene_id, xml, parent_id)
 	text = xml.xpath("@text").to_s
-	is_incoming = xml.name.to_s == "message_in"
-	Message.create(scene_id: scene_id, text: text, is_incoming: is_incoming, parent_id: parent_id)
+	from_character = xml.name.to_s == "character_message"
+	Message.create(scene_id: scene_id, text: text, from_character: from_character, parent_id: parent_id)
 end
 
 # Create records for the dependencies that a scene has on messages
@@ -99,11 +98,9 @@ main
 # REMOVE ALL BELOW
 
 user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
-user.api_keys << ApiKey.create(fb_user_id: 0)
 user.scenes << Scene.find(2)
 user.messages << Message.find(2)
 user.messages << Message.find(4)
 user.messages << Message.find(6)
 
 User.create(fb_user_id: 1, first_name: "David", last_name: "Pliskin", email: "david.pliskin@philanthropy.com")
-user.api_keys << ApiKey.create(fb_user_id: 1)

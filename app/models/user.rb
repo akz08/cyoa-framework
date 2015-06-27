@@ -21,7 +21,8 @@ class User < ActiveRecord::Base
 	private
 
 	def create_associations
-		Character.where(is_add_on: false).each do |character|
+		ApiKey.create(fb_user_id: self.fb_user_id)
+		Character.where(add_on: false).each do |character|
 			self.characters << character
 			scene = character.scenes.first
 			self.scenes << scene

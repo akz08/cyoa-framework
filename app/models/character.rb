@@ -6,5 +6,5 @@ class Character < ActiveRecord::Base
 	validates :age, presence: true
 	validates :gender, presence: true
 	validates :description, presence: true
-	validates :is_add_on, inclusion: { in: [true, false] }
+	validates :add_on, inclusion: { in: [true, false] }
 end

@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20150625122305) do
     t.integer "age",         null: false
     t.string  "gender",      null: false
     t.text    "description", null: false
-    t.boolean "is_add_on",   null: false
+    t.boolean "add_on",      null: false
   end
 
   create_table "characters_users", id: false, force: :cascade do |t|
@@ -45,8 +45,8 @@ ActiveRecord::Schema.define(version: 20150625122305) do
 
   create_table "messages", force: :cascade do |t|
     t.integer "scene_id"
-    t.text    "text",        null: false
-    t.boolean "is_incoming", null: false
+    t.text    "text",           null: false
+    t.boolean "from_character", null: false
     t.integer "parent_id"
   end
 
