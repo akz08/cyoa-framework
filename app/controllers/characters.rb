@@ -24,7 +24,7 @@ class Characters < Grape::API
 		desc "Return static information on all characters available to the user"
 		get do
 			status 200
-			User.find(params[:fb_user_id]).characters
+			{ characters: User.find(params[:fb_user_id]).characters }
 		end
 
 		params do
@@ -38,13 +38,13 @@ class Characters < Grape::API
 			desc "Return static information on a single character available to the user"
 			get do
 				status 200
-				User.find(params[:fb_user_id]).characters.find(params[:character_id])
+				{ character: User.find(params[:fb_user_id]).characters.find(params[:character_id]) }
 			end
 
 			desc "Return static information on all available scenes, for a single character available to the user"
 			get :scenes do
 				status 200
-				User.find(params[:fb_user_id]).scenes.where(character_id: params[:character_id])
+				{ scenes: User.find(params[:fb_user_id]).scenes.where(character_id: params[:character_id]) }
 			end
 		end
 	end

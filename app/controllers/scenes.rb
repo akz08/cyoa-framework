@@ -25,7 +25,7 @@ class Scenes < Grape::API
 		desc "Return static information on all scenes available to the user"
 		get do
 			status 200
-			User.find(params[:fb_user_id]).scenes
+			{ scenes: User.find(params[:fb_user_id]).scenes }
 		end
 
 		params do
@@ -39,13 +39,13 @@ class Scenes < Grape::API
 			desc "Return static information on a single scene available to the user"
 			get do
 				status 200
-				User.find(params[:fb_user_id]).scenes.find(params[:scene_id])
+				{ scene: User.find(params[:fb_user_id]).scenes.find(params[:scene_id]) }
 			end
 
 			desc "Return static information on all exchanged messages, for a single scene available to the user"
 			get :messages do
 				status 200
-				User.find(params[:fb_user_id]).messages.where(scene_id: params[:scene_id])
+				{ messages: User.find(params[:fb_user_id]).messages.where(scene_id: params[:scene_id]) }
 			end
 		end
 	end

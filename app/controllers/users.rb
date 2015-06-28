@@ -27,7 +27,7 @@ class Users < Grape::API
 				begin
 					user = User.find(params[:fb_user_id])
 					status 200
-					user
+					{ key: user.key }
 				rescue ActiveRecord::RecordNotFound
 					user = User.create(
 						fb_user_id: params[:fb_user_id],
@@ -37,7 +37,7 @@ class Users < Grape::API
 					)
 					error!("400 Could not create user.", 400) unless user.valid?
 					status 201
-					{ key: key }
+					{ key: user.key }
 				end
 			end
 		end

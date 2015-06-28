@@ -26,7 +26,7 @@ class Messages < Grape::API
 		desc "Return static information on all messages available to the user"
 		get do
 			status 200
-			User.find(params[:fb_user_id]).messages
+			{ messages: User.find(params[:fb_user_id]).messages }
 		end
 
 		params do
@@ -40,7 +40,7 @@ class Messages < Grape::API
 			get do
 				error!("Message is not available to user.", 403) unless message_exchanged?(params[:fb_user_id], params[:message_id])
 				status 200
-				User.find(params[:fb_user_id]).messages.find(params[:message_id])
+				{ message: User.find(params[:fb_user_id]).messages.find(params[:message_id]) }
 			end
 
 			desc "Process the message sent by the user in response to a character message"
