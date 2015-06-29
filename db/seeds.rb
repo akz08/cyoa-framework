@@ -83,9 +83,9 @@ def self.create_scene_dependencies(scene, xml)
 	dependencies = xml.xpath("@parent_messages").to_s.delete(" ").split(",").each do |dependency|
 		# Get id of message record upon which scene is dependent
 		depends_on_scene_xml_id = dependency.split(":")[0].to_i
-		depends_on_scene = Scene.where("character_id = ?", scene.character_id)[depends_on_scene_xml_id - 1]
+		depends_on_scene = Scene.where("character_id = #{scene.character_id}")[depends_on_scene_xml_id - 1]
 		depends_on_message_xml_id = dependency.split(":")[1].to_i
-		depends_on_message = Message.where("scene_id = ?", depends_on_scene.id)[depends_on_message_xml_id - 1]
+		depends_on_message = Message.where("scene_id = #{depends_on_scene.id}")[depends_on_message_xml_id - 1]
 		# Create specified dependency record
 		scene.dependencies << depends_on_message
 	end
