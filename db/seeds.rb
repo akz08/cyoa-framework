@@ -33,7 +33,7 @@ def self.create_character(xml)
 	gender = xml.xpath("@gender").to_s
 	description = xml.xpath("@description").to_s
 	add_on = xml.xpath("@add_on")
-	if !add_on.empty? then (add_on = !add_on.to_s.to_i.zero?) else (add_on = false) end
+	if add_on.present? then (add_on = !add_on.to_s.to_i.zero?) else (add_on = false) end
 	Character.create(name: name, age: age, gender: gender, description: description, add_on: add_on)
 end
 
@@ -72,7 +72,9 @@ end
 def self.create_message(scene_id, xml, parent_id)
 	text = xml.xpath("@text").to_s
 	from_character = xml.name.to_s == "character_message"
-	Message.create(scene_id: scene_id, text: text, from_character: from_character, parent_id: parent_id)
+	delay = xml.xpath("@delay")
+	if delay.present? then (delay = delay.to_s.to_i) else (delay = nil) end
+	Message.create(scene_id: scene_id, text: text, from_character: from_character, delay: delay, parent_id: parent_id)
 end
 
 # Create records for the dependencies that a scene has on messages

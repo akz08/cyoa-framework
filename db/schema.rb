@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20150625122305) do
 
-  create_table "api_keys", force: :cascade do |t|
+  create_table "api_keys", id: false, force: :cascade do |t|
     t.string   "key"
     t.integer  "fb_user_id"
     t.boolean  "active",     default: true
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20150625122305) do
     t.integer "scene_id"
     t.text    "text",           null: false
     t.boolean "from_character", null: false
+    t.integer "delay"
     t.integer "parent_id"
   end
 

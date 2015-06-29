@@ -3,8 +3,7 @@ require 'grape'
 require 'sinatra/activerecord'
 
 require_relative '../helpers/authentication'
-require_relative '../helpers/post_message_valid'
-require_relative '../helpers/trigger_next_scene'
+require_relative '../helpers/post_message'
 
 require_relative '../models/message'
 require_relative '../models/user'
@@ -45,19 +44,21 @@ class Messages < Grape::API
 
 			desc "Process the message sent by the user in response to a character message"
 			post do
-				error!("Message cannot be posted by user.", 403) unless post_message_valid?(@current_user, @message)
+				error!("Message cannot be sent by user.", 403) unless sent_message_valid?(@current_user, @message)
 				@current_user.messages << @message
-				character_response = @message.children.first
-				if character_response
-					@current_user.messages << character_response
-					choices = character_response.children
-					trigger_next_scene_from_message(@current_user, character_response) if choices.empty?
-					status 201
-					{ character_response: character_response, choices: choices }
+				status 201
+				response = compute_character_response(@user, @message)
+				if response.present?
+					choices = response.last.children
+					if choices.present?
+						{ response: response, choices: choices }
+					else
+						trigger_next_scene(@current_user, response.last)
+						{ response: response, choices: nil }
+					end
 				else
-					trigger_next_scene_from_message(@current_user, @message)
-					status 201
-					{ character_response: nil, choices: nil }
+					trigger_next_scene(@current_user, @message)
+					{ response: nil, choices: nil }
 				end
 			end
 		end

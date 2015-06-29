@@ -29,6 +29,7 @@ class Users < Grape::API
 				error!("User could not be authenticated via Facebook.", 401) unless fb_authenticated?(@current_user, params[:fb_access_token])
 				if @current_user
 					status 200
+					@current_user.touch
 				else
 					@current_user = User.create(
 						fb_user_id: params[:fb_user_id],
