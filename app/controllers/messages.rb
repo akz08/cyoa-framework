@@ -51,11 +51,11 @@ class Messages < Grape::API
 				if character_response
 					@current_user.messages << character_response
 					choices = character_response.children
-					trigger_next_scene(character_response) if choices.empty?
+					trigger_next_scene_from_message(@current_user, character_response) if choices.empty?
 					status 201
 					{ character_response: character_response, choices: choices }
 				else
-					trigger_next_scene(@message)
+					trigger_next_scene_from_message(@current_user, @message)
 					status 201
 					{ character_response: nil, choices: nil }
 				end

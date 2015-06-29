@@ -87,7 +87,7 @@ def self.create_scene_dependencies(scene, xml)
 		depends_on_message_xml_id = dependency.split(":")[1].to_i
 		depends_on_message = Message.where("scene_id = #{depends_on_scene.id}")[depends_on_message_xml_id - 1]
 		# Create specified dependency record
-		scene.dependencies << depends_on_message
+		scene.message_dependencies << depends_on_message
 	end
 end
 

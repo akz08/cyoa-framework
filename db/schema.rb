@@ -43,6 +43,15 @@ ActiveRecord::Schema.define(version: 20150625122305) do
   add_index "characters_users", ["character_id"], name: "index_characters_users_on_character_id"
   add_index "characters_users", ["fb_user_id"], name: "index_characters_users_on_fb_user_id"
 
+  create_table "message_scene_dependencies", id: false, force: :cascade do |t|
+    t.integer "message_id"
+    t.integer "scene_id"
+  end
+
+  add_index "message_scene_dependencies", ["message_id", "scene_id"], name: "index_message_scene_dependencies_on_message_id_and_scene_id", unique: true
+  add_index "message_scene_dependencies", ["message_id"], name: "index_message_scene_dependencies_on_message_id"
+  add_index "message_scene_dependencies", ["scene_id"], name: "index_message_scene_dependencies_on_scene_id"
+
   create_table "messages", force: :cascade do |t|
     t.integer "scene_id"
     t.text    "text",           null: false
@@ -51,15 +60,6 @@ ActiveRecord::Schema.define(version: 20150625122305) do
   end
 
   add_index "messages", ["scene_id"], name: "index_messages_on_scene_id"
-
-  create_table "messages_scenes", id: false, force: :cascade do |t|
-    t.integer "message_id"
-    t.integer "scene_id"
-  end
-
-  add_index "messages_scenes", ["message_id", "scene_id"], name: "index_messages_scenes_on_message_id_and_scene_id", unique: true
-  add_index "messages_scenes", ["message_id"], name: "index_messages_scenes_on_message_id"
-  add_index "messages_scenes", ["scene_id"], name: "index_messages_scenes_on_scene_id"
 
   create_table "messages_users", id: false, force: :cascade do |t|
     t.integer  "message_id"
