@@ -1,5 +1,5 @@
 class ApiKey < ActiveRecord::Base
-	belongs_to :user, foreign_key: 'fb_user_id'		# Associate each key with the user that it belongs to.
+	belongs_to :user, foreign_key: 'fb_user_id'
 
 	validates :fb_user_id, presence: true
 

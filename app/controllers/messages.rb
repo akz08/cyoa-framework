@@ -42,23 +42,26 @@ class Messages < Grape::API
 				{ message: @message }
 			end
 
-			desc "Process the message sent by the user in response to a character message"
+			desc "Verify and associate the user and their response to a character message"
 			post do
-				error!("Message cannot be sent by user.", 403) unless sent_message_valid?(@current_user, @message)
+				error!("Message cannot be sent by user.", 403) unless message_sent_valid?(@current_user, @message)
 				@current_user.messages << @message
 				status 201
-				response = compute_character_response(@user, @message)
-				if response.present?
-					choices = response.last.children
-					if choices.present?
-						{ response: response, choices: choices }
+				character_messages = get_character_response(@message)
+				if character_messages.present?
+					character_messages.each do |message|
+						@current_user.messages << message
+					end
+					user_choices = character_messages.last.children
+					if user_choices.present?
+						{ character_messages: character_messages, user_choices: user_choices }
 					else
-						trigger_next_scene(@current_user, response.last)
-						{ response: response, choices: nil }
+						trigger_next_scene(@current_user, character_messages.last)
+						{ character_messages: character_messages, user_choices: nil }
 					end
 				else
 					trigger_next_scene(@current_user, @message)
-					{ response: nil, choices: nil }
+					{ character_messages: nil, user_choices: nil }
 				end
 			end
 		end

@@ -33,17 +33,26 @@ class Characters < Grape::API
 		after_validation do
 			@character = Character.find_by(id: params[:character_id])
 			error!("Character does not exist.", 404) unless @character
-			error!("Character is not available to user.", 403) unless @current_user.characters.include?(@character)
 		end
 		route_param :character_id do
 			desc "Return static information on a single character available to the user"
 			get do
+				error!("Character is not available to user.", 403) unless @current_user.characters.include?(@character)
 				status 200
+				{ character: @character }
+			end
+
+			desc "Unlock a character for a user"
+			post do
+				error!("Character has already been unlocked by user.", 403) if @current_user.characters.include?(@character)
+				@current_user.characters << @character
+				status 201
 				{ character: @character }
 			end
 
 			desc "Return static information on all available scenes, for a single character available to the user"
 			get :scenes do
+				error!("Character is not available to user.", 403) unless @current_user.characters.include?(@character)
 				status 200
 				{ scenes: @current_user.scenes.where(character_id: @character.id) }
 			end
