@@ -24,7 +24,7 @@ class Scenes < Grape::API
 		desc "Return static information on all scenes available to the user"
 		get do
 			status 200
-			{ scenes: @current_user.scenes }
+			@current_user.scenes
 		end
 
 		params do
@@ -39,13 +39,13 @@ class Scenes < Grape::API
 			desc "Return static information on a single scene available to the user"
 			get do
 				status 200
-				{ scene: @scene }
+				@scene
 			end
 
 			desc "Return static information on all exchanged messages, for a single scene available to the user"
 			get :messages do
 				status 200
-				{ messages: @current_user.messages.where(scene_id: @scene.id) }
+				@current_user.messages.where(scene_id: @scene.id)
 			end
 		end
 	end

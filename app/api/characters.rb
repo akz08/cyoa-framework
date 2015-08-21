@@ -24,7 +24,7 @@ class Characters < Grape::API
 		desc "Return static information on all characters available to the user"
 		get do
 			status 200
-			{ characters: @current_user.characters }
+			@current_user.characters
 		end
 
 		params do
@@ -39,7 +39,7 @@ class Characters < Grape::API
 			get do
 				error!("Character is not available to user.", 403) unless @current_user.characters.include?(@character)
 				status 200
-				{ character: @character }
+				@character
 			end
 
 			desc "Unlock a character for a user"
@@ -47,14 +47,14 @@ class Characters < Grape::API
 				error!("Character has already been unlocked by user.", 403) if @current_user.characters.include?(@character)
 				@current_user.characters << @character
 				status 201
-				{ character: @character }
+				@character
 			end
 
 			desc "Return static information on all available scenes, for a single character available to the user"
 			get :scenes do
 				error!("Character is not available to user.", 403) unless @current_user.characters.include?(@character)
 				status 200
-				{ scenes: @current_user.scenes.where(character_id: @character.id) }
+				@current_user.scenes.where(character_id: @character.id)
 			end
 		end
 	end

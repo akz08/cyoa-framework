@@ -24,7 +24,7 @@ class Messages < Grape::API
 		desc "Return static information on all messages available to the user"
 		get do
 			status 200
-			{ messages: @current_user.messages }
+			@current_user.messages
 		end
 
 		params do
@@ -39,7 +39,7 @@ class Messages < Grape::API
 			get do
 				error!("Message is not available to user.", 403) unless @current_user.messages.include?(@message)
 				status 200
-				{ message: @message }
+				@message
 			end
 
 			desc "Verify and associate the user and their response to a character message"

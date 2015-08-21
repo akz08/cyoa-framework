@@ -1,3 +1,3 @@
-require './app/controllers/api'
+require './app/api/api'
 
 run API

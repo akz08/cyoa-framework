@@ -15,8 +15,8 @@ ActiveRecord::Schema.define(version: 20150625122305) do
 
   create_table "api_keys", id: false, force: :cascade do |t|
     t.string   "key"
-    t.integer  "fb_user_id"
-    t.boolean  "active",     default: true
+    t.integer  "fb_user_id", limit: 8
+    t.boolean  "active",               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20150625122305) do
 
   create_table "characters_users", id: false, force: :cascade do |t|
     t.integer  "character_id"
-    t.integer  "fb_user_id"
+    t.integer  "fb_user_id",   limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20150625122305) do
 
   create_table "messages_users", id: false, force: :cascade do |t|
     t.integer  "message_id"
-    t.integer  "fb_user_id"
+    t.integer  "fb_user_id", limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20150625122305) do
 
   create_table "scenes_users", id: false, force: :cascade do |t|
     t.integer  "scene_id"
-    t.integer  "fb_user_id"
+    t.integer  "fb_user_id", limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -91,12 +91,15 @@ ActiveRecord::Schema.define(version: 20150625122305) do
   add_index "scenes_users", ["scene_id", "fb_user_id"], name: "index_scenes_users_on_scene_id_and_fb_user_id", unique: true
   add_index "scenes_users", ["scene_id"], name: "index_scenes_users_on_scene_id"
 
-  create_table "users", primary_key: "fb_user_id", force: :cascade do |t|
+  create_table "users", id: false, force: :cascade do |t|
+    t.integer  "fb_user_id",      limit: 8
     t.string   "first_name"
     t.string   "last_name"
     t.string   "encrypted_email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "users", ["fb_user_id"], name: "index_users_on_fb_user_id"
 
 end
