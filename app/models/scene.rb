@@ -1,8 +1,10 @@
 class Scene < ActiveRecord::Base
-	belongs_to :character													# Associate each scene with the character that it belongs to.
-	has_many :messages, dependent: :destroy									# Associate each scene with the messages that it has.
-	has_and_belongs_to_many :dependencies, class_name: 'Message'			# Associate each scene with the messages that it is dependent on.
-	has_and_belongs_to_many :users, association_foreign_key: 'fb_user_id'	# Associate each scene with the users that have unlocked it.
+	has_and_belongs_to_many :users, association_foreign_key: 'fb_user_id'
+	belongs_to :character
+	has_many :messages, dependent: :destroy
+	# Each scene has many messages upon which it can be dependent.
+	has_many :message_scene_dependencies, dependent: :destroy
+	has_many :message_dependencies, through: :message_scene_dependencies, source: :message
 
 	validates :character_id, presence: true
 	validates :information, presence: true

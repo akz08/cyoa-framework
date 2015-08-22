@@ -10,7 +10,6 @@ require_relative './scenes'
 require_relative './users'
 
 class API < Grape::API
-	version 'v0.1', using: :path
 	format :json
 
 	mount Characters

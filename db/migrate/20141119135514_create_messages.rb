@@ -4,6 +4,7 @@ class CreateMessages < ActiveRecord::Migration
 			t.belongs_to :scene, index: true
 			t.text :text, null: false
 			t.boolean :from_character, null: false
+			t.integer :delay, null: true
 			t.integer :parent_id, null: true
 		end
 	end

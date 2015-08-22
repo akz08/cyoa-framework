@@ -33,7 +33,7 @@ def self.create_character(xml)
 	gender = xml.xpath("@gender").to_s
 	description = xml.xpath("@description").to_s
 	add_on = xml.xpath("@add_on")
-	if !add_on.empty? then (add_on = !add_on.to_s.to_i.zero?) else (add_on = false) end
+	if add_on.present? then (add_on = !add_on.to_s.to_i.zero?) else (add_on = false) end
 	Character.create(name: name, age: age, gender: gender, description: description, add_on: add_on)
 end
 
@@ -72,7 +72,9 @@ end
 def self.create_message(scene_id, xml, parent_id)
 	text = xml.xpath("@text").to_s
 	from_character = xml.name.to_s == "character_message"
-	Message.create(scene_id: scene_id, text: text, from_character: from_character, parent_id: parent_id)
+	delay = xml.xpath("@delay")
+	if delay.present? then (delay = delay.to_s.to_i) else (delay = nil) end
+	Message.create(scene_id: scene_id, text: text, from_character: from_character, delay: delay, parent_id: parent_id)
 end
 
 # Create records for the dependencies that a scene has on messages
@@ -82,12 +84,12 @@ end
 def self.create_scene_dependencies(scene, xml)
 	dependencies = xml.xpath("@parent_messages").to_s.delete(" ").split(",").each do |dependency|
 		# Get id of message record upon which scene is dependent
-		depends_on_scene_xml_id = dependency.split(":")[0].to_i
-		depends_on_scene = Scene.where("character_id = ?", scene.character_id)[depends_on_scene_xml_id - 1]
-		depends_on_message_xml_id = dependency.split(":")[1].to_i
-		depends_on_message = Message.where("scene_id = ?", depends_on_scene.id)[depends_on_message_xml_id - 1]
+		scene_dependency_xml_id = dependency.split(":")[0].to_i
+		scene_dependency = Scene.where("character_id = #{scene.character_id}")[scene_dependency_xml_id - 1]
+		message_dependency_xml_id = dependency.split(":")[1].to_i
+		message_dependency = Message.where("scene_id = #{scene_dependency.id}")[message_dependency_xml_id - 1]
 		# Create specified dependency record
-		scene.dependencies << depends_on_message
+		scene.message_dependencies << message_dependency
 	end
 end
 
@@ -96,11 +98,11 @@ main
 if ENV['RACK_ENV'] == 'development'
 	require_relative '../app/models/user'
 
+	# User with default character and initial scene/message - matches client after starting conversation
 	user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
-	user.scenes << Scene.find(2)
-	user.messages << Message.find(2)
-	user.messages << Message.find(4)
-	user.messages << Message.find(6)
+	user.scenes << Scene.find(1)
+	user.messages << Message.find(1)
 
+	# Blank user with default character - matches client state after setup
 	User.create(fb_user_id: 1, first_name: "David", last_name: "Pliskin", email: "david.pliskin@philanthropy.com")
 end
