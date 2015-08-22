@@ -22,12 +22,10 @@ class Users < Grape::API
 			desc "Authenticate a user via a Facebook access token"
 			post do
 				params do
-					requires :fb_access_token, type: String
 					optional :first_name, type: String
 					optional :last_name, type: String
 					optional :email, type: String
 				end
-				error!("User could not be authenticated via Facebook.", 401) unless fb_authenticated?(@current_user, params[:fb_access_token])
 				if @current_user
 					status 200
 					@current_user.touch

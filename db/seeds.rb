@@ -98,11 +98,11 @@ main
 if ENV['RACK_ENV'] == 'development'
 	require_relative '../app/models/user'
 
+	# User with default character and initial scene/message - matches client after starting conversation
 	user = User.create(fb_user_id: 0, first_name: "Hal", last_name: "Emmerich", email: "hal.emmerich@philanthropy.com")
-	user.scenes << Scene.find(2)
-	user.messages << Message.find(2)
-	user.messages << Message.find(4)
-	user.messages << Message.find(6)
+	user.scenes << Scene.find(1)
+	user.messages << Message.find(1)
 
+	# Blank user with default character - matches client state after setup
 	User.create(fb_user_id: 1, first_name: "David", last_name: "Pliskin", email: "david.pliskin@philanthropy.com")
 end
