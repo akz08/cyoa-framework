@@ -54,7 +54,6 @@ class Users < Grape::API
 					@current_user.characters << character
 				end
 				status 204
-				true
 			end
 		end
 	end
